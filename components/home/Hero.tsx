@@ -302,13 +302,13 @@ export default function Hero() {
           </motion.h1>
 
           <motion.p
-            className="mx-auto mt-6 max-w-xl text-lg text-white/40"
+            className="mx-auto mt-6 max-w-xl text-lg text-white/50"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.4 }}
           >
             Generate, transform, and interpret live video streams
-            with low-latency AI inference on an elastic GPU network.
+            with low-latency AI inference on an open and permissionless elastic GPU network.
           </motion.p>
 
           <motion.div

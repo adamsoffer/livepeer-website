@@ -40,13 +40,13 @@ const channels = [
 ];
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 24 },
+  hidden: { opacity: 0, y: 32 },
   visible: { opacity: 1, y: 0 },
 };
 
 export default function CommunityCTA() {
   return (
-    <section className="relative py-24 lg:py-32 overflow-hidden">
+    <section className="relative py-32 lg:py-44 overflow-hidden">
       {/* B&W Muybridge plate photo behind tile mask — bold background */}
       <div className="pointer-events-none absolute inset-0 opacity-30" aria-hidden="true">
         <ImageMask
@@ -59,14 +59,12 @@ export default function CommunityCTA() {
         />
       </div>
 
-      <div className="divider-gradient absolute top-0 left-0 right-0" />
-
       <Container className="relative">
         <motion.div
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ staggerChildren: 0.1 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ staggerChildren: 0.15 }}
         >
           <motion.div
             variants={fadeUp}
@@ -79,7 +77,7 @@ export default function CommunityCTA() {
             <h2 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
               Join the network
             </h2>
-            <p className="mx-auto mt-4 max-w-xl text-lg text-white/70">
+            <p className="mx-auto mt-4 max-w-xl text-lg text-white/60">
               Livepeer is built by a global community of developers, operators,
               and token holders working together to create open video
               infrastructure.

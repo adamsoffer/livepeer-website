@@ -302,6 +302,16 @@ export default function WhatIsLivepeer() {
     <section className="relative py-24 lg:py-32 overflow-hidden">
       <div className="divider-gradient absolute top-0 left-0 right-0" />
 
+      {/* Faint radial glow — energy bridge into WhyLivepeer */}
+      <div
+        className="pointer-events-none absolute inset-0"
+        aria-hidden="true"
+        style={{
+          background:
+            "radial-gradient(ellipse 70% 50% at 50% 30%, rgba(24,121,78,0.05) 0%, transparent 70%)",
+        }}
+      />
+
       <Container className="relative">
         <motion.div
           initial="hidden"

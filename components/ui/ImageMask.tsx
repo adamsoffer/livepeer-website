@@ -20,6 +20,7 @@ export default function ImageMask({
   cols = 9,
   rows = 5,
   seed = 0,
+  scanLine = true,
   className = "",
 }: {
   src?: string;
@@ -29,6 +30,7 @@ export default function ImageMask({
   cols?: number;
   rows?: number;
   seed?: number;
+  scanLine?: boolean;
   className?: string;
 }) {
   const tiles = useMemo(() => {
@@ -129,20 +131,22 @@ export default function ImageMask({
       </div>
 
       {/* Layer 3: Scan line sweep */}
-      <div
-        className="pointer-events-none absolute inset-0 overflow-hidden"
-        aria-hidden="true"
-      >
+      {scanLine && (
         <div
-          className="scan-line absolute left-0 right-0 h-[2px]"
-          style={{
-            background:
-              "linear-gradient(to bottom, transparent, rgba(64,191,134,0.08), transparent)",
-            boxShadow: "0 0 20px 8px rgba(64,191,134,0.02)",
-            willChange: "transform",
-          }}
-        />
-      </div>
+          className="pointer-events-none absolute inset-0 overflow-hidden"
+          aria-hidden="true"
+        >
+          <div
+            className="scan-line absolute left-0 right-0 h-[2px]"
+            style={{
+              background:
+                "linear-gradient(to bottom, transparent, rgba(64,191,134,0.08), transparent)",
+              boxShadow: "0 0 20px 8px rgba(64,191,134,0.02)",
+              willChange: "transform",
+            }}
+          />
+        </div>
+      )}
 
       {/* Layer 4: Vignette */}
       <div

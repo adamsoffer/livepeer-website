@@ -3,12 +3,19 @@ export default function SectionHeader({
   title,
   description,
   align = "center",
+  size = "default",
 }: {
   label?: string;
   title: string;
   description?: string;
   align?: "left" | "center";
+  size?: "default" | "small";
 }) {
+  const headingClass =
+    size === "small"
+      ? "text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl"
+      : "text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl";
+
   return (
     <div className={align === "center" ? "text-center" : ""}>
       {label && (
@@ -16,7 +23,7 @@ export default function SectionHeader({
           {label}
         </p>
       )}
-      <h2 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
+      <h2 className={headingClass}>
         {title}
       </h2>
       {description && (

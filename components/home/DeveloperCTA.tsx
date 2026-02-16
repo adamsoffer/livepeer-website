@@ -39,7 +39,7 @@ const resources = [
 ];
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 24 },
+  hidden: { opacity: 0, y: 32 },
   visible: { opacity: 1, y: 0 },
 };
 
@@ -48,12 +48,22 @@ export default function DeveloperCTA() {
     <section className="relative py-24 lg:py-32">
       <div className="divider-gradient absolute top-0 left-0 right-0" />
 
-      <Container>
+      {/* Bottom-weighted glow connecting into CommunityCTA */}
+      <div
+        className="pointer-events-none absolute inset-0"
+        aria-hidden="true"
+        style={{
+          background:
+            "radial-gradient(ellipse 70% 50% at 50% 80%, rgba(24,121,78,0.06) 0%, transparent 70%)",
+        }}
+      />
+
+      <Container className="relative">
         <motion.div
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ staggerChildren: 0.1 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ staggerChildren: 0.15 }}
         >
           <motion.div
             variants={fadeUp}

@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import Container from "@/components/ui/Container";
 import ImageMask from "@/components/ui/ImageMask";
@@ -13,6 +14,13 @@ const fadeUp = {
   hidden: { opacity: 0, y: 24 },
   visible: { opacity: 1, y: 0 },
 };
+
+/* ── Grid units matching homepage hero (9×5) ── */
+const COLS = 9;
+const ROWS = 5;
+const CW = 100 / COLS;
+const CH = 100 / ROWS;
+const RAYS = [0, 22, 45, 68, 90, 135, 170, -15, -40, -70];
 
 const primaryColors = [
   { name: "Accent Green", hex: "#18794E", token: "green", bg: "bg-green" },
@@ -127,12 +135,28 @@ const opacityLevels = [
   { label: "25%", class: "text-white/25", usage: "Hints, disabled" },
 ];
 
-/* ── Geometric shape constants (matching Hero layout) ── */
-const DEMO_COLS = 9;
-const DEMO_ROWS = 5;
-const DCW = 100 / DEMO_COLS;
-const DCH = 100 / DEMO_ROWS;
-const DEMO_RAYS = [0, 22, 45, 68, 90, 135, 170, -15, -40, -70];
+/* ── Copy-to-clipboard helper ── */
+function CopyableHex({ value }: { value: string }) {
+  const [copied, setCopied] = useState(false);
+
+  function handleCopy() {
+    navigator.clipboard.writeText(value);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500);
+  }
+
+  return (
+    <button
+      onClick={handleCopy}
+      className="group flex items-center gap-1.5 font-mono text-xs text-white/40 transition-colors hover:text-white/60"
+    >
+      {value}
+      <span className="text-[10px] text-white/0 transition-colors group-hover:text-white/30">
+        {copied ? "Copied!" : "Copy"}
+      </span>
+    </button>
+  );
+}
 
 function ColorSwatch({
   name,
@@ -150,13 +174,13 @@ function ColorSwatch({
   return (
     <div>
       <div
-        className={`h-20 rounded-lg border border-dark-border ${bg || ""}`}
+        className={`h-20 rounded-lg ${dark ? "border border-white/10" : "border border-dark-border"} ${bg || ""}`}
         style={bg ? undefined : { backgroundColor: hex }}
       />
       <p className={`mt-2 text-sm font-medium ${dark ? "" : "text-white"}`}>
         {name}
       </p>
-      <p className="font-mono text-xs text-white/40">{hex}</p>
+      <CopyableHex value={hex} />
       {token && (
         <p className="font-mono text-xs text-white/30">{token}</p>
       )}
@@ -164,12 +188,237 @@ function ColorSwatch({
   );
 }
 
+/* ── SVG download helper ── */
+function downloadSVG(svgElement: SVGElement | null, filename: string) {
+  if (!svgElement) return;
+  const clone = svgElement.cloneNode(true) as SVGElement;
+  clone.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+  const svgString = new XMLSerializer().serializeToString(clone);
+  const blob = new Blob([svgString], { type: "image/svg+xml" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function DownloadButton({
+  label,
+  svgRef,
+  filename,
+}: {
+  label: string;
+  svgRef: React.RefObject<SVGSVGElement | null>;
+  filename: string;
+}) {
+  return (
+    <button
+      onClick={() => downloadSVG(svgRef.current, filename)}
+      className="mt-2 rounded-md bg-white/[0.06] px-3 py-1.5 font-mono text-[11px] text-white/50 transition-colors hover:bg-white/10 hover:text-white/70"
+    >
+      {label}
+    </button>
+  );
+}
+
+/* ── Logo card with ref for download ── */
+function LogoCard({
+  variant,
+  bgClass,
+  textColor,
+  children,
+  svgRef,
+  filename,
+}: {
+  variant: string;
+  bgClass: string;
+  textColor: string;
+  children: React.ReactNode;
+  svgRef: React.RefObject<SVGSVGElement | null>;
+  filename: string;
+}) {
+  return (
+    <div className="flex flex-col items-center">
+      <div
+        className={`flex h-40 w-full flex-col items-center justify-center rounded-xl border ${
+          bgClass === "bg-white" ? "border-white/10" : "border-dark-border"
+        } ${bgClass} p-10`}
+      >
+        {children}
+        <p className={`mt-4 font-mono text-xs ${textColor}`}>{variant}</p>
+      </div>
+      <DownloadButton
+        label="Download SVG"
+        svgRef={svgRef}
+        filename={filename}
+      />
+    </div>
+  );
+}
+
 export default function BrandPage() {
+  /* Refs for downloadable SVGs */
+  const symbolDarkRef = useRef<SVGSVGElement>(null);
+  const textmarkDarkRef = useRef<SVGSVGElement>(null);
+  const wordmarkDarkRef = useRef<SVGSVGElement>(null);
+  const symbolLightRef = useRef<SVGSVGElement>(null);
+  const textmarkLightRef = useRef<SVGSVGElement>(null);
+  const wordmarkLightRef = useRef<SVGSVGElement>(null);
+
   return (
     <>
-      {/* Section 1: Hero */}
-      <section className="relative flex items-center overflow-hidden py-32 lg:py-40">
-        <Container className="relative">
+      {/* Section 1: Hero — ImageMask + percentage-based shapes (matches homepage) */}
+      <section className="relative flex min-h-[70vh] items-center overflow-hidden">
+        {/* Full-bleed ImageMask — top-aligned so tiles start flush at viewport top */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div
+            className="absolute top-0 left-1/2 -translate-x-1/2"
+            style={{ minWidth: "100%", minHeight: "100%", aspectRatio: "9/5" }}
+          >
+            <ImageMask
+              className="h-full w-full"
+              cols={COLS}
+              rows={ROWS}
+              seed={7}
+              scanLine={false}
+            >
+              <div
+                className="h-full w-full"
+                style={{
+                  background:
+                    "linear-gradient(160deg, #030d09 0%, #0a2818 40%, #18794e 100%)",
+                }}
+              />
+            </ImageMask>
+
+            {/* Geometric shapes — inside 9/5 container so percentages align with tile grid */}
+            <div
+              className="pointer-events-none absolute inset-0"
+              aria-hidden="true"
+            >
+              {/* Large circle — cols 6–8, rows 0–2 (3×3 tiles, perfect circle) */}
+              <div
+                className="absolute rounded-full animate-[breathe_8s_ease-in-out_infinite]"
+                style={{
+                  left: `${6 * CW}%`,
+                  top: "0%",
+                  width: `${3 * CW}%`,
+                  aspectRatio: "1",
+                  border: "1px solid rgba(255,255,255,0.15)",
+                }}
+              />
+
+              {/* Small circle — cols 0–1, rows 3–4 (2×2 tiles, perfect circle) */}
+              <div
+                className="absolute rounded-full animate-[breathe_8s_ease-in-out_infinite_3s]"
+                style={{
+                  left: "0%",
+                  top: `${3 * CH}%`,
+                  width: `${2 * CW}%`,
+                  aspectRatio: "1",
+                  border: "1px solid rgba(255,255,255,0.10)",
+                }}
+              />
+
+              {/* Starburst — (col 1, row 1) */}
+              <div
+                className="absolute rounded-full animate-[node-pulse_6s_ease-in-out_infinite]"
+                style={{
+                  left: `calc(${CW}% - 20px)`,
+                  top: `calc(${CH}% - 20px)`,
+                  width: "40px",
+                  height: "40px",
+                  background:
+                    "radial-gradient(circle, rgba(64,191,134,0.25) 0%, rgba(64,191,134,0.08) 40%, transparent 70%)",
+                }}
+              />
+              {RAYS.map((angle, i) => (
+                <div
+                  key={`hero-ray-${i}`}
+                  className="absolute"
+                  style={{
+                    left: `${1 * CW}%`,
+                    top: `${1 * CH}%`,
+                    width: "40%",
+                    height: "1px",
+                    background:
+                      "linear-gradient(to right, rgba(255,255,255,0.12), rgba(255,255,255,0.03) 35%, transparent 70%)",
+                    transformOrigin: "0% 50%",
+                    transform: `rotate(${angle}deg)`,
+                  }}
+                />
+              ))}
+
+              {/* H-line — row 3 seam, cols 0–4 */}
+              <div
+                className="absolute"
+                style={{
+                  left: "0%",
+                  top: `${3 * CH}%`,
+                  width: `${4 * CW}%`,
+                  height: "1px",
+                  background:
+                    "linear-gradient(to right, rgba(255,255,255,0.08), rgba(255,255,255,0.12) 40%, transparent 100%)",
+                }}
+              />
+
+              {/* V-line — col 7 seam, rows 3–5 */}
+              <div
+                className="absolute"
+                style={{
+                  left: `${7 * CW}%`,
+                  top: `${3 * CH}%`,
+                  width: "1px",
+                  height: `${2 * CH}%`,
+                  background:
+                    "linear-gradient(to bottom, rgba(255,255,255,0.10), transparent 100%)",
+                }}
+              />
+
+              {/* Crosshair — (col 6, row 4) */}
+              <div
+                className="absolute"
+                style={{
+                  left: `${6 * CW}%`,
+                  top: `${4 * CH}%`,
+                }}
+              >
+                <div
+                  style={{
+                    position: "absolute",
+                    left: "-6px",
+                    top: "-0.5px",
+                    width: "13px",
+                    height: "1px",
+                    background: "rgba(255,255,255,0.12)",
+                  }}
+                />
+                <div
+                  style={{
+                    position: "absolute",
+                    left: "-0.5px",
+                    top: "-6px",
+                    width: "1px",
+                    height: "13px",
+                    background: "rgba(255,255,255,0.12)",
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Center darken for text readability */}
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(ellipse 60% 50% at 50% 48%, rgba(4,6,5,0.78) 0%, rgba(4,6,5,0.35) 70%, transparent 100%)",
+          }}
+        />
+
+        <Container className="relative z-10 py-24 lg:py-32">
           <motion.div
             className="mx-auto max-w-3xl text-center"
             initial={{ opacity: 0, y: 20 }}
@@ -183,16 +432,27 @@ export default function BrandPage() {
               Brand Guidelines
             </h1>
             <p className="mt-6 text-lg text-white/60">
-              Visual identity system derived from the Holographik brand
-              guidelines, adapted and extended for the web.
+              Resources for presenting the Livepeer brand consistently
+              and professionally.
             </p>
           </motion.div>
         </Container>
+
+        {/* Bottom fade to page bg */}
+        <div
+          className="pointer-events-none absolute bottom-0 left-0 right-0 h-48"
+          aria-hidden="true"
+          style={{
+            background: "linear-gradient(to bottom, transparent, #181818)",
+          }}
+        />
+
+        {/* Divider */}
+        <div className="divider-gradient absolute bottom-0 left-0 right-0" />
       </section>
 
       {/* Section 2: Logo */}
       <section className="relative py-24 lg:py-32">
-        <div className="divider-gradient absolute top-0 left-0 right-0" />
         <Container>
           <motion.div
             initial="hidden"
@@ -227,24 +487,45 @@ export default function BrandPage() {
                 On dark background
               </p>
               <div className="grid gap-6 sm:grid-cols-3">
-                <div className="flex flex-col items-center justify-center rounded-xl border border-dark-border bg-dark-card p-10">
-                  <LivepeerSymbol className="h-16 w-auto text-white" />
-                  <p className="mt-4 font-mono text-xs text-white/40">
-                    Symbol
-                  </p>
-                </div>
-                <div className="flex flex-col items-center justify-center rounded-xl border border-dark-border bg-dark-card p-10">
-                  <LivepeerTextmark className="h-6 w-auto text-white" />
-                  <p className="mt-4 font-mono text-xs text-white/40">
-                    Textmark
-                  </p>
-                </div>
-                <div className="flex flex-col items-center justify-center rounded-xl border border-dark-border bg-dark-card p-10">
-                  <LivepeerWordmark className="h-6 w-auto text-white" />
-                  <p className="mt-4 font-mono text-xs text-white/40">
-                    Wordmark
-                  </p>
-                </div>
+                <LogoCard
+                  variant="Symbol"
+
+                  bgClass="bg-dark-card"
+                  textColor="text-white/40"
+                  svgRef={symbolDarkRef}
+                  filename="livepeer-symbol-white.svg"
+                >
+                  <LivepeerSymbol
+                    className="h-16 w-auto text-white"
+                    ref={symbolDarkRef}
+                  />
+                </LogoCard>
+                <LogoCard
+                  variant="Textmark"
+
+                  bgClass="bg-dark-card"
+                  textColor="text-white/40"
+                  svgRef={textmarkDarkRef}
+                  filename="livepeer-textmark-white.svg"
+                >
+                  <LivepeerTextmark
+                    className="h-6 w-auto text-white"
+                    ref={textmarkDarkRef}
+                  />
+                </LogoCard>
+                <LogoCard
+                  variant="Wordmark"
+
+                  bgClass="bg-dark-card"
+                  textColor="text-white/40"
+                  svgRef={wordmarkDarkRef}
+                  filename="livepeer-wordmark-white.svg"
+                >
+                  <LivepeerWordmark
+                    className="h-6 w-auto text-white"
+                    ref={wordmarkDarkRef}
+                  />
+                </LogoCard>
               </div>
             </motion.div>
 
@@ -258,24 +539,45 @@ export default function BrandPage() {
                 On light background
               </p>
               <div className="grid gap-6 sm:grid-cols-3">
-                <div className="flex flex-col items-center justify-center rounded-xl border border-white/10 bg-white p-10">
-                  <LivepeerSymbol className="h-16 w-auto text-[#181818]" />
-                  <p className="mt-4 font-mono text-xs text-[#181818]/40">
-                    Symbol
-                  </p>
-                </div>
-                <div className="flex flex-col items-center justify-center rounded-xl border border-white/10 bg-white p-10">
-                  <LivepeerTextmark className="h-6 w-auto text-[#181818]" />
-                  <p className="mt-4 font-mono text-xs text-[#181818]/40">
-                    Textmark
-                  </p>
-                </div>
-                <div className="flex flex-col items-center justify-center rounded-xl border border-white/10 bg-white p-10">
-                  <LivepeerWordmark className="h-6 w-auto text-[#181818]" />
-                  <p className="mt-4 font-mono text-xs text-[#181818]/40">
-                    Wordmark
-                  </p>
-                </div>
+                <LogoCard
+                  variant="Symbol"
+
+                  bgClass="bg-white"
+                  textColor="text-[#181818]/40"
+                  svgRef={symbolLightRef}
+                  filename="livepeer-symbol-black.svg"
+                >
+                  <LivepeerSymbol
+                    className="h-16 w-auto text-[#181818]"
+                    ref={symbolLightRef}
+                  />
+                </LogoCard>
+                <LogoCard
+                  variant="Textmark"
+
+                  bgClass="bg-white"
+                  textColor="text-[#181818]/40"
+                  svgRef={textmarkLightRef}
+                  filename="livepeer-textmark-black.svg"
+                >
+                  <LivepeerTextmark
+                    className="h-6 w-auto text-[#181818]"
+                    ref={textmarkLightRef}
+                  />
+                </LogoCard>
+                <LogoCard
+                  variant="Wordmark"
+
+                  bgClass="bg-white"
+                  textColor="text-[#181818]/40"
+                  svgRef={wordmarkLightRef}
+                  filename="livepeer-wordmark-black.svg"
+                >
+                  <LivepeerWordmark
+                    className="h-6 w-auto text-[#181818]"
+                    ref={wordmarkLightRef}
+                  />
+                </LogoCard>
               </div>
             </motion.div>
 
@@ -313,6 +615,7 @@ export default function BrandPage() {
                 </p>
               </div>
             </motion.div>
+
           </motion.div>
         </Container>
       </section>
@@ -365,7 +668,7 @@ export default function BrandPage() {
               <p className="mb-4 font-mono text-xs tracking-wider text-white/40 uppercase">
                 Green Variants
               </p>
-              <div className="grid grid-cols-5 gap-4">
+              <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
                 {greenVariants.map((c) => (
                   <ColorSwatch key={c.token} {...c} />
                 ))}
@@ -381,7 +684,7 @@ export default function BrandPage() {
               <p className="mb-4 font-mono text-xs tracking-wider text-white/40 uppercase">
                 Blue Accent
               </p>
-              <div className="grid grid-cols-5 gap-4">
+              <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
                 {blueVariants.map((c) => (
                   <ColorSwatch key={c.token} {...c} />
                 ))}
@@ -397,7 +700,7 @@ export default function BrandPage() {
               <p className="mb-4 font-mono text-xs tracking-wider text-white/40 uppercase">
                 Surface Scale
               </p>
-              <div className="grid grid-cols-4 gap-6">
+              <div className="grid grid-cols-2 gap-6 sm:grid-cols-4">
                 {darkSurfaces.map((c) => (
                   <ColorSwatch key={c.token} {...c} />
                 ))}
@@ -413,7 +716,8 @@ export default function BrandPage() {
               <p className="mb-4 font-mono text-xs tracking-wider text-white/40 uppercase">
                 Greyscale Ramp
               </p>
-              <div className="flex gap-0 overflow-hidden rounded-lg border border-dark-border">
+              {/* Desktop: horizontal strip */}
+              <div className="hidden overflow-hidden rounded-lg border border-dark-border sm:flex">
                 {greyscale.map((c) => (
                   <div key={c.hex} className="flex-1">
                     <div
@@ -424,6 +728,24 @@ export default function BrandPage() {
                       <p className="font-mono text-[10px] text-white/40">
                         {c.hex}
                       </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              {/* Mobile: 2-column grid */}
+              <div className="grid grid-cols-2 gap-3 sm:hidden">
+                {greyscale.map((c) => (
+                  <div
+                    key={`m-${c.hex}`}
+                    className="flex items-center gap-3 rounded-lg border border-dark-border bg-dark-card p-2"
+                  >
+                    <div
+                      className={`h-10 w-10 flex-shrink-0 rounded ${c.hex === "#FFFFFF" ? "border border-white/10" : ""}`}
+                      style={{ backgroundColor: c.hex }}
+                    />
+                    <div>
+                      <p className="text-xs text-white/60">{c.name}</p>
+                      <CopyableHex value={c.hex} />
                     </div>
                   </div>
                 ))}
@@ -443,17 +765,17 @@ export default function BrandPage() {
                 {opacityLevels.map((level) => (
                   <div
                     key={level.label}
-                    className="flex items-center gap-6 rounded-lg border border-dark-border bg-dark-card px-6 py-4"
+                    className="flex items-center gap-4 rounded-lg border border-dark-border bg-dark-card px-4 py-3 sm:gap-6 sm:px-6 sm:py-4"
                   >
                     <span
-                      className={`text-lg font-medium ${level.class}`}
+                      className={`text-base font-medium sm:text-lg ${level.class}`}
                     >
                       The quick brown fox
                     </span>
-                    <span className="ml-auto font-mono text-xs text-white/40">
+                    <span className="ml-auto hidden font-mono text-xs text-white/40 sm:block">
                       {level.class}
                     </span>
-                    <span className="font-mono text-xs text-white/30">
+                    <span className="ml-auto font-mono text-xs text-white/30 sm:ml-0">
                       {level.usage}
                     </span>
                   </div>
@@ -569,7 +891,7 @@ export default function BrandPage() {
               </div>
             </motion.div>
 
-            {/* Text hierarchy examples */}
+            {/* Text hierarchy with size specs */}
             <motion.div
               variants={fadeUp}
               transition={{ duration: 0.5 }}
@@ -580,33 +902,53 @@ export default function BrandPage() {
               </p>
               <div className="space-y-8 rounded-xl border border-dark-border bg-dark-card p-8">
                 <div>
-                  <p className="mb-1 font-mono text-xs text-white/30">
-                    Label — Mono, uppercase, tracking-wider, text-white/40
-                  </p>
+                  <div className="mb-1 flex items-baseline gap-3">
+                    <p className="font-mono text-xs text-white/30">
+                      Label — Mono, uppercase, tracking-wider
+                    </p>
+                    <p className="font-mono text-[10px] text-green/60">
+                      text-sm &middot; 14px &middot; text-white/40
+                    </p>
+                  </div>
                   <p className="font-mono text-sm font-medium tracking-wider text-white/40 uppercase">
                     Section Label
                   </p>
                 </div>
                 <div>
-                  <p className="mb-1 font-mono text-xs text-white/30">
-                    Display Heading — Bold, tracking-tight, leading-[0.93]
-                  </p>
+                  <div className="mb-1 flex items-baseline gap-3">
+                    <p className="font-mono text-xs text-white/30">
+                      Display Heading — Bold, tracking-tight, leading-[0.93]
+                    </p>
+                    <p className="font-mono text-[10px] text-green/60">
+                      text-7xl &middot; 72px &middot; text-white
+                    </p>
+                  </div>
                   <p className="text-5xl font-bold leading-[0.93] tracking-tight lg:text-7xl">
                     Hero Heading
                   </p>
                 </div>
                 <div>
-                  <p className="mb-1 font-mono text-xs text-white/30">
-                    Section Heading — Bold, tracking-tight
-                  </p>
+                  <div className="mb-1 flex items-baseline gap-3">
+                    <p className="font-mono text-xs text-white/30">
+                      Section Heading — Bold, tracking-tight
+                    </p>
+                    <p className="font-mono text-[10px] text-green/60">
+                      text-5xl &middot; 48px &middot; text-white
+                    </p>
+                  </div>
                   <h2 className="text-4xl font-bold tracking-tight sm:text-5xl">
                     Section Title
                   </h2>
                 </div>
                 <div>
-                  <p className="mb-1 font-mono text-xs text-white/30">
-                    Body — text-lg, text-white/60
-                  </p>
+                  <div className="mb-1 flex items-baseline gap-3">
+                    <p className="font-mono text-xs text-white/30">
+                      Body — text-lg
+                    </p>
+                    <p className="font-mono text-[10px] text-green/60">
+                      text-lg &middot; 18px &middot; text-white/60
+                    </p>
+                  </div>
                   <p className="text-lg text-white/60">
                     The Livepeer network is open infrastructure for real-time
                     AI video. Build applications powered by decentralized
@@ -614,9 +956,28 @@ export default function BrandPage() {
                   </p>
                 </div>
                 <div>
-                  <p className="mb-1 font-mono text-xs text-white/30">
-                    Stat — Mono, text-4xl, font-bold
+                  <div className="mb-1 flex items-baseline gap-3">
+                    <p className="font-mono text-xs text-white/30">
+                      Small Body
+                    </p>
+                    <p className="font-mono text-[10px] text-green/60">
+                      text-sm &middot; 14px &middot; text-white/50
+                    </p>
+                  </div>
+                  <p className="text-sm text-white/50">
+                    Supporting text, descriptions, and secondary content use
+                    the smaller body size with reduced opacity.
                   </p>
+                </div>
+                <div>
+                  <div className="mb-1 flex items-baseline gap-3">
+                    <p className="font-mono text-xs text-white/30">
+                      Stat — Mono, font-bold
+                    </p>
+                    <p className="font-mono text-[10px] text-green/60">
+                      text-4xl &middot; 36px &middot; text-green
+                    </p>
+                  </div>
                   <p className="font-mono text-4xl font-bold text-green">
                     100,000+
                   </p>
@@ -684,7 +1045,7 @@ export default function BrandPage() {
               className="text-center"
             >
               <p className="mb-3 font-mono text-sm font-medium tracking-wider text-white/40 uppercase">
-                Gradients
+                Expression
               </p>
               <h2 className="text-4xl font-bold tracking-tight sm:text-5xl">
                 Gradients
@@ -787,18 +1148,17 @@ export default function BrandPage() {
               <p className="mb-4 font-mono text-xs tracking-wider text-white/40 uppercase">
                 ImageMask Component
               </p>
-              <ImageMask className="aspect-video rounded-xl" cols={9} rows={5}>
-                <div
-                  className="h-full w-full"
-                  style={{
-                    background:
-                      "linear-gradient(160deg, #030d09 0%, #0a2818 40%, #18794e 100%)",
-                  }}
-                />
-              </ImageMask>
+              <ImageMask
+                src="/images/circuit-board.jpg"
+                className="aspect-video rounded-xl"
+                cols={9}
+                rows={5}
+                seed={42}
+              />
               <p className="mt-3 text-sm text-white/50">
-                5-layer system: dark green base, B&W media, tile grid with white
-                borders, scan line sweep, vignette. Pure CSS, no canvas.
+                5-layer system: dark green base, B&W media with green tint, tile
+                grid with white borders, scan line sweep, vignette. Pure CSS, no
+                canvas.
               </p>
             </motion.div>
 
@@ -862,7 +1222,7 @@ export default function BrandPage() {
                           "radial-gradient(circle, rgba(64,191,134,0.25) 0%, rgba(64,191,134,0.08) 40%, transparent 70%)",
                       }}
                     />
-                    {DEMO_RAYS.map((angle, i) => (
+                    {RAYS.map((angle, i) => (
                       <div
                         key={`demo-ray-${i}`}
                         className="absolute"
@@ -976,54 +1336,54 @@ export default function BrandPage() {
               <div
                 className="tile-bg relative overflow-hidden rounded-xl border border-dark-border"
                 style={{
-                  aspectRatio: "16/9",
+                  height: "336px",
                   background:
                     "linear-gradient(160deg, #030d09 0%, #0a2818 40%, #18794e 100%)",
                 }}
               >
-                {/* Large circle — cols 6–8, rows 0–2 */}
+                {/* Large circle — 5 tiles (240px), top-right */}
                 <div
                   className="absolute rounded-full animate-[breathe_8s_ease-in-out_infinite]"
                   style={{
-                    left: `${6 * DCW}%`,
-                    top: "0%",
-                    width: `${3 * DCW}%`,
-                    height: `${3 * DCH}%`,
+                    right: "48px",
+                    top: "-48px",
+                    width: "240px",
+                    height: "240px",
                     border: "1px solid rgba(255,255,255,0.15)",
                   }}
                 />
 
-                {/* Small circle — cols 0–1, rows 3–4 */}
+                {/* Small circle — 3 tiles (144px), bottom-left */}
                 <div
                   className="absolute rounded-full animate-[breathe_8s_ease-in-out_infinite_3s]"
                   style={{
-                    left: "0%",
-                    top: `${3 * DCH}%`,
-                    width: `${2 * DCW}%`,
-                    height: `${2 * DCH}%`,
+                    left: "-24px",
+                    bottom: "48px",
+                    width: "144px",
+                    height: "144px",
                     border: "1px solid rgba(255,255,255,0.10)",
                   }}
                 />
 
-                {/* Starburst — (col 1, row 1) */}
+                {/* Starburst — at tile intersection (2,2) */}
                 <div
                   className="absolute rounded-full animate-[node-pulse_6s_ease-in-out_infinite]"
                   style={{
-                    left: `calc(${DCW}% - 20px)`,
-                    top: `calc(${DCH}% - 20px)`,
+                    left: "76px",
+                    top: "76px",
                     width: "40px",
                     height: "40px",
                     background:
                       "radial-gradient(circle, rgba(64,191,134,0.25) 0%, rgba(64,191,134,0.08) 40%, transparent 70%)",
                   }}
                 />
-                {DEMO_RAYS.map((angle, i) => (
+                {RAYS.map((angle, i) => (
                   <div
                     key={`comp-ray-${i}`}
                     className="absolute"
                     style={{
-                      left: `${1 * DCW}%`,
-                      top: `${1 * DCH}%`,
+                      left: "96px",
+                      top: "96px",
                       width: "40%",
                       height: "1px",
                       background:
@@ -1034,39 +1394,36 @@ export default function BrandPage() {
                   />
                 ))}
 
-                {/* H-line — row 3, cols 0–4 */}
+                {/* H-line at 5th tile row (240px) */}
                 <div
                   className="absolute"
                   style={{
-                    left: "0%",
-                    top: `${3 * DCH}%`,
-                    width: `${4 * DCW}%`,
+                    left: "0px",
+                    top: "240px",
+                    width: "384px",
                     height: "1px",
                     background:
                       "linear-gradient(to right, rgba(255,255,255,0.08), rgba(255,255,255,0.12) 40%, transparent 100%)",
                   }}
                 />
 
-                {/* V-line — col 7, rows 3–5 */}
+                {/* V-line at 7th tile col (336px), 2 tiles tall */}
                 <div
                   className="absolute"
                   style={{
-                    left: `${7 * DCW}%`,
-                    top: `${3 * DCH}%`,
+                    left: "336px",
+                    top: "192px",
                     width: "1px",
-                    height: `${2 * DCH}%`,
+                    height: "96px",
                     background:
                       "linear-gradient(to bottom, rgba(255,255,255,0.10), transparent 100%)",
                   }}
                 />
 
-                {/* Crosshair — (col 6, row 4) */}
+                {/* Crosshair at tile intersection (6, 4) = (288px, 192px) */}
                 <div
                   className="absolute"
-                  style={{
-                    left: `${6 * DCW}%`,
-                    top: `${4 * DCH}%`,
-                  }}
+                  style={{ left: "288px", top: "192px" }}
                 >
                   <div
                     style={{

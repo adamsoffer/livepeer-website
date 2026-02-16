@@ -3,7 +3,6 @@
 import { motion } from "framer-motion";
 import Container from "@/components/ui/Container";
 import SectionHeader from "@/components/ui/SectionHeader";
-import Card from "@/components/ui/Card";
 import ImageMask from "@/components/ui/ImageMask";
 
 const roles = [
@@ -11,7 +10,6 @@ const roles = [
     title: "Orchestrators",
     description:
       "GPU operators who perform video transcoding and AI processing work. They stake LPT to signal reliability and compete for jobs based on price, performance, and uptime.",
-    color: "border-green/50",
     icon: (
       <svg className="h-8 w-8" viewBox="0 0 32 32" fill="none">
         <rect x="6" y="6" width="20" height="20" rx="4" stroke="currentColor" strokeWidth="1.5" />
@@ -23,7 +21,6 @@ const roles = [
     title: "Gateways",
     description:
       "Entry points that route video jobs to the best-suited orchestrators. They handle job selection, load balancing, and quality assurance on behalf of developers.",
-    color: "border-white/20",
     icon: (
       <svg className="h-8 w-8" viewBox="0 0 32 32" fill="none">
         <circle cx="16" cy="8" r="4" stroke="currentColor" strokeWidth="1.5" />
@@ -37,7 +34,6 @@ const roles = [
     title: "Delegators",
     description:
       "LPT holders who stake tokens with orchestrators to help secure the network and earn a share of the fees and rewards generated.",
-    color: "border-white/20",
     icon: (
       <svg className="h-8 w-8" viewBox="0 0 32 32" fill="none">
         <circle cx="16" cy="12" r="4" stroke="currentColor" strokeWidth="1.5" />
@@ -49,7 +45,6 @@ const roles = [
     title: "Developers",
     description:
       "Builders who integrate the Livepeer network into their applications through gateways. They send video processing jobs and receive transcoded or AI-processed output.",
-    color: "border-white/20",
     icon: (
       <svg className="h-8 w-8" viewBox="0 0 32 32" fill="none">
         <path d="M12 10l-6 6 6 6M20 10l6 6-6 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -59,14 +54,13 @@ const roles = [
 ];
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 24 },
+  hidden: { opacity: 0, y: 16 },
   visible: { opacity: 1, y: 0 },
 };
 
 export default function NetworkParticipants() {
   return (
-    <section className="relative py-24 lg:py-32 overflow-hidden">
-      <div className="divider-gradient absolute top-0 left-0 right-0" />
+    <section className="relative py-20 lg:py-28 overflow-hidden">
 
       {/* B&W server rack photo behind tile mask */}
       <div className="pointer-events-none absolute inset-0 opacity-20" aria-hidden="true">
@@ -84,27 +78,33 @@ export default function NetworkParticipants() {
         <motion.div
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ staggerChildren: 0.1 }}
+          viewport={{ once: true, margin: "-120px" }}
+          transition={{ staggerChildren: 0.08 }}
         >
           <motion.div variants={fadeUp} transition={{ duration: 0.5 }}>
             <SectionHeader
               label="Network"
               title="Who runs the network"
               description="Four key roles work together to power open video infrastructure."
+              size="small"
             />
           </motion.div>
 
-          <div className="mt-16 grid gap-6 sm:grid-cols-2">
+          <div className="mt-16 space-y-3">
             {roles.map((role) => (
-              <motion.div key={role.title} variants={fadeUp} transition={{ duration: 0.5 }}>
-                <Card className={`h-full ${role.color}`}>
-                  <div className="text-green">{role.icon}</div>
-                  <h3 className="mt-4 text-lg font-medium">{role.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-white/50">
+              <motion.div
+                key={role.title}
+                variants={fadeUp}
+                transition={{ duration: 0.5 }}
+                className="flex items-start gap-5 rounded-xl border border-dark-border bg-dark-card/60 p-5 backdrop-blur-sm"
+              >
+                <div className="flex-shrink-0 text-green">{role.icon}</div>
+                <div>
+                  <h3 className="text-base font-medium">{role.title}</h3>
+                  <p className="mt-1.5 text-sm leading-relaxed text-white/50">
                     {role.description}
                   </p>
-                </Card>
+                </div>
               </motion.div>
             ))}
           </div>

@@ -12,11 +12,11 @@ export default function Home() {
   return (
     <>
       <Hero />
-      <WhatIsLivepeer />
       <Capabilities />
+      <WhatIsLivepeer />
       <WhyLivepeer />
-      <NetworkStats />
       <BuiltOnLivepeer />
+      <NetworkStats />
       <NetworkParticipants />
       <DeveloperCTA />
       <CommunityCTA />
