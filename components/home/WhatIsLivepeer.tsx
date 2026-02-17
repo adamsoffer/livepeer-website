@@ -6,7 +6,7 @@ import SectionHeader from "@/components/ui/SectionHeader";
 
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 24 },
+  hidden: { opacity: 0, y: 12 },
   visible: { opacity: 1, y: 0 },
 };
 
@@ -95,26 +95,26 @@ function StatusIcon({ status }: { status: "running" | "queued" | "completed" }) 
 function ProductUI() {
   return (
     <div className="relative">
-      {/* Glow effect behind the frame */}
+      {/* Glow effect behind the frame — neutral, reduced */}
       <div
-        className="pointer-events-none absolute -inset-8 rounded-3xl opacity-40 blur-3xl"
+        className="pointer-events-none absolute -inset-8 rounded-3xl opacity-20 blur-3xl"
         style={{
           background:
-            "radial-gradient(ellipse at 50% 40%, rgba(24,121,78,0.25), transparent 70%)",
+            "radial-gradient(ellipse at 50% 40%, rgba(255,255,255,0.15), transparent 70%)",
         }}
       />
 
       {/* Gradient border wrapper — Linear-style */}
       <div
-        className="relative rounded-2xl p-px"
+        className="relative rounded-xl p-px"
         style={{
           background:
-            "linear-gradient(180deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.06) 40%, rgba(255,255,255,0.02) 100%)",
+            "linear-gradient(180deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.04) 40%, rgba(255,255,255,0.02) 100%)",
         }}
       >
       {/* App frame */}
-      <div className="relative overflow-hidden rounded-2xl bg-[#0c0c0c]">
-        <div className="flex min-h-[420px]">
+      <div className="relative overflow-hidden rounded-xl bg-[#0c0c0c]">
+        <div className="flex min-h-[520px]">
           {/* Sidebar */}
           <div className="hidden w-[200px] flex-shrink-0 border-r border-white/[0.06] sm:block">
             {/* Sidebar header — account dropdown */}
@@ -129,73 +129,73 @@ function ProductUI() {
             </div>
 
             <div className="px-2 py-3">
-              {/* Top items */}
+              {/* Main nav */}
               <div className="space-y-0.5">
-                <div className="flex items-center gap-2.5 rounded-md px-3 py-1.5 text-[13px] text-white/35">
+                <div className="flex items-center gap-2.5 rounded-md bg-white/[0.06] px-3 py-1.5 text-[13px] font-medium text-white/80">
+                  {/* Pipelines — stacked layers icon */}
                   <svg className="h-4 w-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.2">
-                    <rect x="2" y="2" width="12" height="12" rx="2" />
-                    <path d="M6 6h4M6 8h4M6 10h2" />
+                    <path d="M8 1.5L1.5 5 8 8.5 14.5 5z" />
+                    <path d="M1.5 8L8 11.5 14.5 8" />
+                    <path d="M1.5 11L8 14.5 14.5 11" />
                   </svg>
-                  Inbox
+                  Pipelines
                 </div>
                 <div className="flex items-center gap-2.5 rounded-md px-3 py-1.5 text-[13px] text-white/35">
+                  {/* Streams — play/broadcast icon */}
                   <svg className="h-4 w-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.2">
-                    <circle cx="8" cy="8" r="6" />
-                    <path d="M8 5v3l2 1.5" strokeLinecap="round" />
+                    <path d="M5.5 4v8l7-4z" />
                   </svg>
-                  My pipelines
+                  Streams
+                </div>
+                <div className="flex items-center gap-2.5 rounded-md px-3 py-1.5 text-[13px] text-white/35">
+                  {/* Assets — film frame icon */}
+                  <svg className="h-4 w-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.2">
+                    <rect x="2" y="3" width="12" height="10" rx="1.5" />
+                    <path d="M2 6h12M2 10h12M5 3v10M11 3v10" />
+                  </svg>
+                  Assets
+                </div>
+                <div className="flex items-center gap-2.5 rounded-md px-3 py-1.5 text-[13px] text-white/35">
+                  {/* Models — grid/blocks icon */}
+                  <svg className="h-4 w-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.2">
+                    <rect x="1.5" y="1.5" width="5" height="5" rx="1" />
+                    <rect x="9.5" y="1.5" width="5" height="5" rx="1" />
+                    <rect x="1.5" y="9.5" width="5" height="5" rx="1" />
+                    <rect x="9.5" y="9.5" width="5" height="5" rx="1" />
+                  </svg>
+                  Models
                 </div>
               </div>
 
-              {/* Workspace section */}
+              {/* Monitor section */}
               <div className="mt-5">
                 <div className="mb-1 px-3 text-[11px] font-medium tracking-wider text-white/20 uppercase">
-                  Workspace
+                  Monitor
                 </div>
                 <div className="space-y-0.5">
-                  <div className="flex items-center gap-2.5 rounded-md bg-white/[0.06] px-3 py-1.5 text-[13px] font-medium text-white/80">
+                  <div className="flex items-center gap-2.5 rounded-md px-3 py-1.5 text-[13px] text-white/35">
+                    {/* Usage — bar chart icon */}
                     <svg className="h-4 w-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.2">
-                      <path d="M8 1.5L1.5 5 8 8.5 14.5 5z" />
-                      <path d="M1.5 8L8 11.5 14.5 8" />
-                      <path d="M1.5 11L8 14.5 14.5 11" />
+                      <path d="M3 13V8M7 13V5M11 13V3" strokeLinecap="round" />
                     </svg>
-                    Pipelines
+                    Usage
                   </div>
                   <div className="flex items-center gap-2.5 rounded-md px-3 py-1.5 text-[13px] text-white/35">
-                    <svg className="h-4 w-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.2">
-                      <circle cx="8" cy="8" r="6.5" />
-                      <path d="M1.5 8h13M8 1.5c-2.5 2.5-2.5 10 0 13M8 1.5c2.5 2.5 2.5 10 0 13" />
-                    </svg>
-                    Network
-                  </div>
-                  <div className="flex items-center gap-2.5 rounded-md px-3 py-1.5 text-[13px] text-white/35">
-                    <svg className="h-4 w-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.2">
-                      <rect x="1.5" y="1.5" width="5" height="5" rx="1" />
-                      <rect x="9.5" y="1.5" width="5" height="5" rx="1" />
-                      <rect x="1.5" y="9.5" width="5" height="5" rx="1" />
-                      <rect x="9.5" y="9.5" width="5" height="5" rx="1" />
-                    </svg>
-                    Models
-                  </div>
-                  <div className="flex items-center gap-2.5 rounded-md px-3 py-1.5 text-[13px] text-white/35">
+                    {/* Logs — terminal/console icon */}
                     <svg className="h-4 w-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.2">
                       <rect x="2" y="2.5" width="12" height="11" rx="1.5" />
-                      <path d="M5 6h1M5 8.5h6M5 11h4" />
+                      <path d="M5 7l2 1.5L5 10" strokeLinecap="round" strokeLinejoin="round" />
+                      <path d="M9 10h2" strokeLinecap="round" />
                     </svg>
                     Logs
                   </div>
-                </div>
-              </div>
-
-              {/* Teams section */}
-              <div className="mt-5">
-                <div className="mb-1 px-3 text-[11px] font-medium tracking-wider text-white/20 uppercase">
-                  Your teams
-                </div>
-                <div className="space-y-0.5">
                   <div className="flex items-center gap-2.5 rounded-md px-3 py-1.5 text-[13px] text-white/35">
-                    <span className="flex h-4 w-4 items-center justify-center rounded bg-emerald-500/20 text-[9px] font-bold text-emerald-400">L</span>
-                    Livepeer, Inc
+                    {/* API Keys — key icon */}
+                    <svg className="h-4 w-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.2">
+                      <circle cx="5.5" cy="7" r="3" />
+                      <path d="M8 8.5l5 5M11 11.5l2-2" strokeLinecap="round" />
+                    </svg>
+                    API Keys
                   </div>
                 </div>
               </div>
@@ -302,24 +302,14 @@ export default function WhatIsLivepeer() {
     <section className="relative py-24 lg:py-32 overflow-hidden">
       <div className="divider-gradient absolute top-0 left-0 right-0" />
 
-      {/* Faint radial glow — energy bridge into WhyLivepeer */}
-      <div
-        className="pointer-events-none absolute inset-0"
-        aria-hidden="true"
-        style={{
-          background:
-            "radial-gradient(ellipse 70% 50% at 50% 30%, rgba(24,121,78,0.05) 0%, transparent 70%)",
-        }}
-      />
-
       <Container className="relative">
         <motion.div
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
-          transition={{ staggerChildren: 0.15 }}
+          transition={{ staggerChildren: 0.08 }}
         >
-          <motion.div variants={fadeUp} transition={{ duration: 0.5 }}>
+          <motion.div variants={fadeUp} transition={{ duration: 0.4 }}>
             <SectionHeader
               label="What is Livepeer"
               title="The open GPU network for real-time AI video"
@@ -331,7 +321,7 @@ export default function WhatIsLivepeer() {
           <motion.div
             className="relative -mx-4 mt-16 sm:-mx-8 lg:-mx-16"
             variants={fadeUp}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.4 }}
           >
             <ProductUI />
             {/* Bottom fade to section bg */}

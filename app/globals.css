@@ -36,8 +36,8 @@ body {
 /* Tile grid background — subtle, structural */
 .tile-bg {
   background-image:
-    linear-gradient(to right, rgba(24, 121, 78, 0.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(24, 121, 78, 0.04) 1px, transparent 1px);
+    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
   background-size: 48px 48px;
 }
 
@@ -47,9 +47,8 @@ body {
   background: linear-gradient(
     to right,
     transparent,
-    rgba(255, 255, 255, 0.08) 25%,
-    rgba(255, 255, 255, 0.12) 50%,
-    rgba(255, 255, 255, 0.08) 75%,
+    rgba(255, 255, 255, 0.06) 30%,
+    rgba(255, 255, 255, 0.06) 70%,
     transparent
   );
 }
@@ -113,6 +112,47 @@ body {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(8px); }
 }
+
+/* Star twinkle — gentle opacity pulse */
+@keyframes twinkle {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.9; }
+}
+
+/* Terrain generation cursor — vertical line sweeps left to right */
+@keyframes generateSweep {
+  0% { left: -2%; }
+  100% { left: 102%; }
+}
+
+/* Terrain reveal — clip-path synced with cursor to paint terrain L→R */
+@keyframes revealTerrain {
+  0% { clip-path: inset(0 102% 0 0); }
+  100% { clip-path: inset(0 -2% 0 0); }
+}
+
+
+/* Shimmer — sliding highlight via background-position */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Dash flow — stroke-dashoffset scroll for SVG lines */
+@keyframes dashFlow {
+  0% { stroke-dashoffset: 16; }
+  100% { stroke-dashoffset: 0; }
+}
+
+/* Arrow flow — subtle rightward pulse */
+@keyframes arrowFlow {
+  0%, 100% { transform: translateX(0); opacity: 0.25; }
+  50% { transform: translateX(3px); opacity: 0.5; }
+}
+
+/* Text wrap utilities */
+.text-balance { text-wrap: balance; }
+.text-pretty { text-wrap: pretty; }
 
 /* Accessibility */
 @media (prefers-reduced-motion: reduce) {

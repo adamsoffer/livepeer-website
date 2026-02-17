@@ -8,40 +8,43 @@ import ImageMask from "@/components/ui/ImageMask";
 import { EXTERNAL_LINKS } from "@/lib/constants";
 
 /*
-  9×5 tile grid on ~16:9 viewport.
-  CW ≈ 11.11%, CH = 20%.
+  9×5 tile grid with square tiles.
+  Tile size = 100vw / 9 ≈ 11.11vw.
+
+  All grid-aligned elements use vw units for both x and y
+  so they stay locked to tile intersections at any viewport size.
 
   Three visual layers (besides content):
     1. Video + tile mask — the core visual
     2. White geometric shapes — structural framing
     3. Emerald starburst node + pulse trail — the AI accent
-
-  The pulse trail walks the tile grid from the starburst origin,
-  following a random path through grid intersections, fading as it goes.
 */
 
 const COLS = 9;
 const ROWS = 5;
-const CW = 100 / COLS;
-const CH = 100 / ROWS;
+const TILE = 100 / COLS; // tile size in vw — used for both axes
 
 const RAYS = [0, 22, 45, 68, 90, 135, 170, -15, -40, -70];
 
 /* ── Pulse trail: walks the tile grid from starburst origin ── */
 function PulseTrail() {
-  const [pos, setPos] = useState<{ x: number; y: number; opacity: number }>({
-    x: CW,
-    y: CH,
+  const [pos, setPos] = useState<{
+    col: number;
+    row: number;
+    opacity: number;
+  }>({
+    col: 1,
+    row: 1,
     opacity: 0,
   });
-  const pathRef = useRef<{ x: number; y: number }[]>([]);
+  const pathRef = useRef<{ col: number; row: number }[]>([]);
   const stepRef = useRef(0);
   const timeoutRef = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   const generatePath = useCallback(() => {
     let col = 1;
     let row = 1;
-    const path = [{ x: col * CW, y: row * CH }];
+    const path = [{ col, row }];
     const visited = new Set([`${col},${row}`]);
 
     for (let i = 0; i < 6; i++) {
@@ -67,7 +70,7 @@ function PulseTrail() {
       col += d.dc;
       row += d.dr;
       visited.add(`${col},${row}`);
-      path.push({ x: col * CW, y: row * CH });
+      path.push({ col, row });
     }
 
     return path;
@@ -93,8 +96,8 @@ function PulseTrail() {
       const point = path[step];
       const fade = step / path.length;
       setPos({
-        x: point.x,
-        y: point.y,
+        col: point.col,
+        row: point.row,
         opacity: 0.8 * (1 - fade * 0.9),
       });
       stepRef.current = step + 1;
@@ -112,8 +115,8 @@ function PulseTrail() {
     <div
       className="absolute -translate-x-1/2 -translate-y-1/2 rounded-full transition-all duration-[800ms] ease-in-out"
       style={{
-        left: `${pos.x}%`,
-        top: `${pos.y}%`,
+        left: `${pos.col * TILE}vw`,
+        top: `${pos.row * TILE}vw`,
         opacity: pos.opacity,
         width: "6px",
         height: "6px",
@@ -148,10 +151,10 @@ export default function Hero() {
         <div
           className="absolute rounded-full animate-[breathe_8s_ease-in-out_infinite]"
           style={{
-            left: `${6 * CW}%`,
-            top: "0%",
-            width: `${3 * CW}%`,
-            height: `${3 * CH}%`,
+            left: `${6 * TILE}vw`,
+            top: "0vw",
+            width: `${3 * TILE}vw`,
+            aspectRatio: "1 / 1",
             border: "1px solid rgba(255,255,255,0.15)",
           }}
         />
@@ -160,10 +163,10 @@ export default function Hero() {
         <div
           className="absolute rounded-full animate-[breathe_8s_ease-in-out_infinite_3s]"
           style={{
-            left: "0%",
-            top: `${3 * CH}%`,
-            width: `${2 * CW}%`,
-            height: `${2 * CH}%`,
+            left: "0vw",
+            top: `${3 * TILE}vw`,
+            width: `${2 * TILE}vw`,
+            aspectRatio: "1 / 1",
             border: "1px solid rgba(255,255,255,0.10)",
           }}
         />
@@ -172,8 +175,8 @@ export default function Hero() {
         <div
           className="absolute rounded-full animate-[node-pulse_6s_ease-in-out_infinite]"
           style={{
-            left: `calc(${CW}% - 20px)`,
-            top: `calc(${CH}% - 20px)`,
+            left: `calc(${1 * TILE}vw - 20px)`,
+            top: `calc(${1 * TILE}vw - 20px)`,
             width: "40px",
             height: "40px",
             background:
@@ -185,8 +188,8 @@ export default function Hero() {
             key={`ray-${i}`}
             className="absolute"
             style={{
-              left: `${1 * CW}%`,
-              top: `${1 * CH}%`,
+              left: `${1 * TILE}vw`,
+              top: `${1 * TILE}vw`,
               width: "40%",
               height: "1px",
               background:
@@ -197,27 +200,14 @@ export default function Hero() {
           />
         ))}
 
-        {/* H-line — row 3 seam, cols 0–4 */}
-        <div
-          className="absolute"
-          style={{
-            left: "0%",
-            top: `${3 * CH}%`,
-            width: `${4 * CW}%`,
-            height: "1px",
-            background:
-              "linear-gradient(to right, rgba(255,255,255,0.08), rgba(255,255,255,0.12) 40%, transparent 100%)",
-          }}
-        />
-
         {/* V-line — col 7 seam, rows 3–5 */}
         <div
           className="absolute"
           style={{
-            left: `${7 * CW}%`,
-            top: `${3 * CH}%`,
+            left: `${7 * TILE}vw`,
+            top: `${3 * TILE}vw`,
             width: "1px",
-            height: `${2 * CH}%`,
+            height: `${2 * TILE}vw`,
             background:
               "linear-gradient(to bottom, rgba(255,255,255,0.10), transparent 100%)",
           }}
@@ -227,8 +217,8 @@ export default function Hero() {
         <div
           className="absolute"
           style={{
-            left: `${6 * CW}%`,
-            top: `${4 * CH}%`,
+            left: `${6 * TILE}vw`,
+            top: `${4 * TILE}vw`,
           }}
         >
           <div
@@ -273,7 +263,10 @@ export default function Hero() {
       >
         <div
           className="absolute flex items-center gap-2"
-          style={{ left: `${0.3 * CW}%`, top: `${0.25 * CH}%` }}
+          style={{
+            left: `${0.3 * TILE}vw`,
+            top: `${0.25 * TILE}vw`,
+          }}
         >
           <span className="h-1.5 w-1.5 rounded-full bg-emerald-400/70 animate-pulse" />
           <span className="font-mono text-[10px] tracking-wider text-emerald-400/50 uppercase">

@@ -5,7 +5,7 @@ import Container from "@/components/ui/Container";
 import SectionHeader from "@/components/ui/SectionHeader";
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 24 },
+  hidden: { opacity: 0, y: 12 },
   visible: { opacity: 1, y: 0 },
 };
 
@@ -108,7 +108,7 @@ function ColdStartVis() {
         transition={{
           type: "spring",
           stiffness: 300,
-          damping: 15,
+          damping: 25,
           delay: 0.6,
         }}
       >
@@ -120,7 +120,7 @@ function ColdStartVis() {
           transition={{
             type: "spring",
             stiffness: 400,
-            damping: 10,
+            damping: 25,
             delay: 0.8,
           }}
         />
@@ -185,7 +185,7 @@ function ScaleVis() {
   );
 }
 
-/* ── Card wrapper with accent line and hover effects ── */
+/* ── Card wrapper ── */
 function AdvantageCard({
   children,
   className = "",
@@ -196,17 +196,9 @@ function AdvantageCard({
   return (
     <motion.div
       variants={fadeUp}
-      transition={{ duration: 0.5 }}
-      className={`group relative flex flex-col overflow-hidden rounded-2xl border border-dark-border bg-dark-card p-7 transition-all duration-300 hover:border-green/20 hover:shadow-[0_0_30px_rgba(24,121,78,0.08)] hover:scale-[1.01] ${className}`}
+      transition={{ duration: 0.4 }}
+      className={`group relative flex flex-col overflow-hidden rounded-xl border border-white/[0.07] bg-[#1a1a1a] p-7 transition-colors duration-200 hover:border-white/[0.12] ${className}`}
     >
-      {/* Green accent line at top */}
-      <div
-        className="absolute top-0 left-0 right-0 h-[2px]"
-        style={{
-          background:
-            "linear-gradient(to right, transparent, #18794e, transparent)",
-        }}
-      />
       {children}
     </motion.div>
   );
@@ -217,45 +209,14 @@ export default function WhyLivepeer() {
     <section className="relative py-24 lg:py-32 overflow-hidden">
       <div className="divider-gradient absolute top-0 left-0 right-0" />
 
-      {/* Radial glow */}
-      <div
-        className="pointer-events-none absolute inset-0"
-        aria-hidden="true"
-        style={{
-          background:
-            "radial-gradient(ellipse 80% 40% at 50% 60%, rgba(24,121,78,0.10) 0%, transparent 70%)",
-        }}
-      />
-
-      {/* Tile grid overlay */}
-      <div className="tile-bg pointer-events-none absolute inset-0" aria-hidden="true" />
-
-      {/* Geometric accent lines */}
-      <div
-        className="pointer-events-none absolute top-[20%] left-0 h-[1px] w-32"
-        aria-hidden="true"
-        style={{
-          background:
-            "linear-gradient(to right, transparent, rgba(24,121,78,0.3), transparent)",
-        }}
-      />
-      <div
-        className="pointer-events-none absolute top-[30%] right-0 w-[1px] h-32"
-        aria-hidden="true"
-        style={{
-          background:
-            "linear-gradient(to bottom, transparent, rgba(24,121,78,0.3), transparent)",
-        }}
-      />
-
       <Container className="relative">
         <motion.div
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
-          transition={{ staggerChildren: 0.12 }}
+          transition={{ staggerChildren: 0.06 }}
         >
-          <motion.div variants={fadeUp} transition={{ duration: 0.5 }}>
+          <motion.div variants={fadeUp} transition={{ duration: 0.4 }}>
             <SectionHeader
               label="Why Livepeer"
               title="Built for real-time"
@@ -263,7 +224,7 @@ export default function WhyLivepeer() {
             />
           </motion.div>
 
-          <div className="mt-16 grid gap-6 sm:grid-cols-2">
+          <div className="mt-16 grid gap-4 sm:grid-cols-2">
             <AdvantageCard>
               <div className="font-mono text-5xl font-bold tracking-tight text-gradient lg:text-6xl">
                 10x

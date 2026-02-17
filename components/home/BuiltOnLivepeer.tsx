@@ -5,7 +5,7 @@ import Container from "@/components/ui/Container";
 import SectionHeader from "@/components/ui/SectionHeader";
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 24 },
+  hidden: { opacity: 0, y: 12 },
   visible: { opacity: 1, y: 0 },
 };
 
@@ -422,9 +422,9 @@ export default function BuiltOnLivepeer() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
-          transition={{ staggerChildren: 0.1 }}
+          transition={{ staggerChildren: 0.06 }}
         >
-          <motion.div variants={fadeUp} transition={{ duration: 0.5 }}>
+          <motion.div variants={fadeUp} transition={{ duration: 0.4 }}>
             <SectionHeader
               label="Ecosystem"
               title="Built on Livepeer"
@@ -432,18 +432,18 @@ export default function BuiltOnLivepeer() {
             />
           </motion.div>
 
-          <div className="mt-16 grid gap-5 sm:grid-cols-2">
+          <div className="mt-16 grid gap-4 sm:grid-cols-2">
             {projects.map((project, i) => (
               <motion.div
                 key={i}
                 variants={fadeUp}
-                transition={{ duration: 0.5 }}
+                transition={{ duration: 0.4 }}
               >
                 <a
                   href={project.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group block h-full overflow-hidden rounded-2xl border border-dark-border bg-dark-card transition-colors hover:border-green/20"
+                  className="group block h-full overflow-hidden rounded-xl border border-white/[0.07] bg-[#1a1a1a] transition-colors duration-200 hover:border-white/[0.12]"
                 >
                   <project.Visual />
                   <div className="px-5 py-4">

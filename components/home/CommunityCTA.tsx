@@ -40,7 +40,7 @@ const channels = [
 ];
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 32 },
+  hidden: { opacity: 0, y: 12 },
   visible: { opacity: 1, y: 0 },
 };
 
@@ -48,7 +48,7 @@ export default function CommunityCTA() {
   return (
     <section className="relative py-32 lg:py-44 overflow-hidden">
       {/* B&W Muybridge plate photo behind tile mask — bold background */}
-      <div className="pointer-events-none absolute inset-0 opacity-30" aria-hidden="true">
+      <div className="pointer-events-none absolute inset-0 opacity-15" aria-hidden="true">
         <ImageMask
           video="/videos/ai-face.mp4"
           cols={5}
@@ -64,20 +64,20 @@ export default function CommunityCTA() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-80px" }}
-          transition={{ staggerChildren: 0.15 }}
+          transition={{ staggerChildren: 0.06 }}
         >
           <motion.div
             variants={fadeUp}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.4 }}
             className="mx-auto max-w-3xl text-center"
           >
-            <p className="mb-3 font-mono text-sm font-medium tracking-wider text-white/40 uppercase">
+            <p className="mb-4 font-mono text-xs font-medium tracking-wider text-white/30 uppercase">
               Community
             </p>
-            <h2 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
+            <h2 className="text-4xl font-bold tracking-tight text-balance sm:text-5xl lg:text-6xl">
               Join the network
             </h2>
-            <p className="mx-auto mt-4 max-w-xl text-lg text-white/60">
+            <p className="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-white/50 text-pretty">
               Livepeer is built by a global community of developers, operators,
               and token holders working together to create open video
               infrastructure.
@@ -89,7 +89,7 @@ export default function CommunityCTA() {
             </div>
           </motion.div>
 
-          <div className="mt-16 grid gap-6 md:grid-cols-3">
+          <div className="mt-16 grid gap-4 md:grid-cols-3">
             {channels.map((channel) => (
               <motion.a
                 key={channel.name}
@@ -101,10 +101,10 @@ export default function CommunityCTA() {
                     : undefined
                 }
                 variants={fadeUp}
-                transition={{ duration: 0.5 }}
-                className="group flex items-start gap-4 rounded-2xl border border-dark-border bg-dark-card/80 p-6 backdrop-blur-sm transition-all hover:border-green/20"
+                transition={{ duration: 0.4 }}
+                className="group flex items-start gap-4 rounded-xl border border-white/[0.07] bg-[#1a1a1a] p-6 transition-colors duration-200 hover:border-white/[0.12]"
               >
-                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl border border-dark-border bg-dark text-green transition-colors group-hover:border-green/20">
+                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg border border-white/[0.06] bg-white/[0.03] text-green transition-colors duration-200 group-hover:border-white/[0.10]">
                   {channel.icon}
                 </div>
                 <div>

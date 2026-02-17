@@ -100,11 +100,11 @@ export default function ImageMask({
 
       {/* Layer 2: Frosted glass tile grid */}
       <div
-        className="absolute inset-0"
+        className="absolute inset-x-0 top-0"
         style={{
           display: "grid",
           gridTemplateColumns: `repeat(${cols}, 1fr)`,
-          gridTemplateRows: `repeat(${rows}, 1fr)`,
+          gridTemplateRows: `repeat(${rows}, calc(100vw / ${cols}))`,
         }}
       >
         {tiles.map((tile, i) => (

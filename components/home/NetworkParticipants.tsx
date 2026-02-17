@@ -54,7 +54,7 @@ const roles = [
 ];
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 16 },
+  hidden: { opacity: 0, y: 12 },
   visible: { opacity: 1, y: 0 },
 };
 
@@ -63,7 +63,7 @@ export default function NetworkParticipants() {
     <section className="relative py-20 lg:py-28 overflow-hidden">
 
       {/* B&W server rack photo behind tile mask */}
-      <div className="pointer-events-none absolute inset-0 opacity-20" aria-hidden="true">
+      <div className="pointer-events-none absolute inset-0 opacity-10" aria-hidden="true">
         <ImageMask
           video="/videos/ai-world.mp4"
           cols={5}
@@ -79,9 +79,9 @@ export default function NetworkParticipants() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-120px" }}
-          transition={{ staggerChildren: 0.08 }}
+          transition={{ staggerChildren: 0.06 }}
         >
-          <motion.div variants={fadeUp} transition={{ duration: 0.5 }}>
+          <motion.div variants={fadeUp} transition={{ duration: 0.4 }}>
             <SectionHeader
               label="Network"
               title="Who runs the network"
@@ -90,18 +90,18 @@ export default function NetworkParticipants() {
             />
           </motion.div>
 
-          <div className="mt-16 space-y-3">
+          <div className="mt-16 space-y-4">
             {roles.map((role) => (
               <motion.div
                 key={role.title}
                 variants={fadeUp}
-                transition={{ duration: 0.5 }}
-                className="flex items-start gap-5 rounded-xl border border-dark-border bg-dark-card/60 p-5 backdrop-blur-sm"
+                transition={{ duration: 0.4 }}
+                className="flex items-start gap-5 rounded-xl border border-white/[0.07] bg-[#1a1a1a] p-6 transition-colors duration-200 hover:border-white/[0.12]"
               >
                 <div className="flex-shrink-0 text-green">{role.icon}</div>
                 <div>
                   <h3 className="text-base font-medium">{role.title}</h3>
-                  <p className="mt-1.5 text-sm leading-relaxed text-white/50">
+                  <p className="mt-1.5 text-sm leading-relaxed text-white/40">
                     {role.description}
                   </p>
                 </div>

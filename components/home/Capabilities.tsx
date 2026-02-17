@@ -1,18 +1,22 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence, useInView } from "framer-motion";
 import Container from "@/components/ui/Container";
 import SectionHeader from "@/components/ui/SectionHeader";
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 24 },
+  hidden: { opacity: 0, y: 12 },
   visible: { opacity: 1, y: 0 },
 };
 
 /* ── Illustration: AI-Generated World ── */
 function WorldsVisual() {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: false, margin: "-50px" });
+
   return (
-    <div className="relative h-full overflow-hidden rounded-lg bg-[#070b0a]">
+    <div ref={ref} className="relative h-full overflow-hidden rounded-lg bg-[#070b0a]">
       {/* Sky gradient */}
       <div className="absolute inset-0 bg-gradient-to-b from-[#080f0c] via-[#060d0a] to-[#0a0a0a]" />
 
@@ -24,52 +28,71 @@ function WorldsVisual() {
         <div
           key={i}
           className="absolute h-px w-px rounded-full bg-white/50"
-          style={{ left: `${x}%`, top: `${y}%` }}
+          style={{
+            left: `${x}%`,
+            top: `${y}%`,
+            animation: `twinkle 4s ease-in-out infinite`,
+            animationDelay: `${i * 0.4}s`,
+          }}
         />
       ))}
 
-      {/* Terrain layers — SVG landscape */}
-      <svg
-        className="absolute bottom-0 left-0 w-full h-[60%]"
-        viewBox="0 0 400 120"
-        preserveAspectRatio="none"
-        fill="none"
-      >
-        {/* Far mountains */}
-        <path
-          d="M0 80 L40 45 L80 65 L130 30 L180 55 L220 25 L270 50 L320 35 L360 55 L400 40 V120 H0Z"
-          fill="rgba(24,121,78,0.18)"
-        />
-        {/* Mid hills */}
-        <path
-          d="M0 95 L50 70 L100 85 L160 60 L210 78 L260 65 L320 80 L370 70 L400 82 V120 H0Z"
-          fill="rgba(24,121,78,0.25)"
-        />
-        {/* Foreground */}
-        <path
-          d="M0 105 L60 92 L120 100 L180 88 L240 98 L300 90 L360 96 L400 92 V120 H0Z"
-          fill="rgba(24,121,78,0.35)"
-        />
-        {/* Grid lines overlaying terrain */}
-        {[0, 50, 100, 150, 200, 250, 300, 350, 400].map((x) => (
-          <line key={`v${x}`} x1={x} y1="0" x2={x} y2="120" stroke="rgba(255,255,255,0.07)" strokeWidth="0.5" />
-        ))}
-        {[0, 30, 60, 90, 120].map((y) => (
-          <line key={`h${y}`} x1="0" y1={y} x2="400" y2={y} stroke="rgba(255,255,255,0.07)" strokeWidth="0.5" />
-        ))}
-      </svg>
-
-      {/* Generation scan line */}
+      {/* Terrain layers — revealed L→R by cursor, plays once */}
       <div
-        className="pointer-events-none absolute inset-x-0 h-px"
+        className="absolute bottom-0 left-0 w-full h-[60%]"
         style={{
-          top: "52%",
-          background: "linear-gradient(to right, transparent, rgba(64,191,134,0.35) 30%, rgba(64,191,134,0.5) 50%, rgba(64,191,134,0.35) 70%, transparent)",
+          clipPath: "inset(0 102% 0 0)",
+          animation: inView ? "revealTerrain 4.5s linear forwards" : "none",
+        }}
+      >
+        <svg
+          className="absolute inset-0 w-full h-full"
+          viewBox="0 0 400 120"
+          preserveAspectRatio="none"
+          fill="none"
+        >
+          {/* Far mountains */}
+          <path
+            d="M0 80 L40 45 L80 65 L130 30 L180 55 L220 25 L270 50 L320 35 L360 55 L400 40 V120 H0Z"
+            fill="rgba(24,121,78,0.18)"
+          />
+          {/* Mid hills */}
+          <path
+            d="M0 95 L50 70 L100 85 L160 60 L210 78 L260 65 L320 80 L370 70 L400 82 V120 H0Z"
+            fill="rgba(24,121,78,0.25)"
+          />
+          {/* Foreground */}
+          <path
+            d="M0 105 L60 92 L120 100 L180 88 L240 98 L300 90 L360 96 L400 92 V120 H0Z"
+            fill="rgba(24,121,78,0.35)"
+          />
+          {/* Grid lines overlaying terrain */}
+          {[0, 50, 100, 150, 200, 250, 300, 350, 400].map((x) => (
+            <line key={`v${x}`} x1={x} y1="0" x2={x} y2="120" stroke="rgba(255,255,255,0.07)" strokeWidth="0.5" />
+          ))}
+          {[0, 30, 60, 90, 120].map((y) => (
+            <line key={`h${y}`} x1="0" y1={y} x2="400" y2={y} stroke="rgba(255,255,255,0.07)" strokeWidth="0.5" />
+          ))}
+        </svg>
+      </div>
+
+      {/* Generation cursor — sweeps once then disappears */}
+      <div
+        className="pointer-events-none absolute inset-y-0 w-[2px]"
+        style={{
+          left: 0,
+          background: "linear-gradient(to bottom, transparent, rgba(64,191,134,0.5) 30%, rgba(64,191,134,0.8) 50%, rgba(64,191,134,0.5) 70%, transparent)",
+          boxShadow: "0 0 8px rgba(64,191,134,0.4), 0 0 20px rgba(64,191,134,0.2)",
+          opacity: inView ? 1 : 0,
+          animation: inView ? "generateSweep 4.5s linear forwards" : "none",
         }}
       />
 
       {/* HUD */}
-      <div className="absolute left-3 top-2.5 font-mono text-[9px] text-emerald-400/70">
+      <div
+        className="absolute left-3 top-2.5 font-mono text-[9px] text-emerald-400/70"
+        style={{ animation: "breathe 3s ease-in-out infinite" }}
+      >
         GENERATING
       </div>
       <div className="absolute right-3 top-2.5 font-mono text-[9px] text-white/35">
@@ -84,7 +107,6 @@ function WorldsVisual() {
 
 /* ── Illustration: Live Transcoding & Streaming (ABR Ladder) ── */
 function TranscodingVisual() {
-  const sparklinePoints = "0,28 8,24 16,26 24,18 32,20 40,14 48,22 56,16 64,12 72,18 80,10 88,14 96,8 104,16 112,12 120,6 128,14 136,10 144,16 152,12";
   const renditions = [
     { res: "1080p", fps: "60fps", width: "100%" },
     { res: "720p", fps: "30fps", width: "78%" },
@@ -108,12 +130,22 @@ function TranscodingVisual() {
 
         {/* ABR Ladder */}
         <div className="absolute inset-x-4 top-10 bottom-8 flex flex-col justify-center gap-2.5">
-          {renditions.map((r) => (
+          {renditions.map((r, i) => (
             <div key={r.res} className="flex items-center gap-3">
               <div
-                className="h-[6px] rounded-full bg-gradient-to-r from-green/80 to-green/30"
+                className="relative h-[6px] overflow-hidden rounded-full bg-gradient-to-r from-green/80 to-green/30"
                 style={{ width: r.width }}
-              />
+              >
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    background: "linear-gradient(90deg, transparent 30%, rgba(255,255,255,0.12) 50%, transparent 70%)",
+                    backgroundSize: "200% 100%",
+                    animation: "shimmer 3s ease-in-out infinite",
+                    animationDelay: `${i * 0.4}s`,
+                  }}
+                />
+              </div>
               <span className="font-mono text-[10px] text-white/50 whitespace-nowrap">
                 {r.res} {r.fps}
               </span>
@@ -121,17 +153,6 @@ function TranscodingVisual() {
           ))}
         </div>
 
-        {/* Sparkline bitrate graph */}
-        <svg className="absolute bottom-0 left-0 right-0 h-[24px]" viewBox="0 0 160 32" preserveAspectRatio="none">
-          <defs>
-            <linearGradient id="sparkFill" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="rgba(255,255,255,0.1)" />
-              <stop offset="100%" stopColor="rgba(255,255,255,0)" />
-            </linearGradient>
-          </defs>
-          <polyline points={sparklinePoints} fill="none" stroke="rgba(255,255,255,0.25)" strokeWidth="1" />
-          <polygon points={`0,32 ${sparklinePoints} 152,32`} fill="url(#sparkFill)" />
-        </svg>
       </div>
 
       {/* Bottom stats */}
@@ -142,35 +163,150 @@ function TranscodingVisual() {
   );
 }
 
+/* ── Tracking box — smooth drift + micro-jitter + detection lifecycle ── */
+interface Detection {
+  x: number; y: number; w: number; h: number;
+  label: string; color: string; conf: number;
+  drift: { freqX: number; freqY: number; amtX: number; amtY: number };
+  sil: { left: string; top: string; w: string; h: string; opacity: number };
+}
+
+function TrackingBox({ d, i, active, entered }: {
+  d: Detection; i: number; active: boolean; entered: boolean;
+}) {
+  const [pos, setPos] = useState({ x: 0, y: 0 });
+  const [conf, setConf] = useState(d.conf);
+  const t0 = useRef(Date.now());
+
+  useEffect(() => {
+    // Smooth drift from layered sine waves — no jitter, just organic tracking
+    const tick = setInterval(() => {
+      const t = (Date.now() - t0.current) / 1000;
+
+      const dx =
+        Math.sin(t * d.drift.freqX) * d.drift.amtX +
+        Math.sin(t * d.drift.freqX * 2.3 + 1.2) * d.drift.amtX * 0.3;
+      const dy =
+        Math.sin(t * d.drift.freqY + 0.7) * d.drift.amtY +
+        Math.cos(t * d.drift.freqY * 1.7 + 0.4) * d.drift.amtY * 0.3;
+
+      setPos({ x: dx, y: dy });
+      setConf(Math.min(0.99, Math.max(0.68, d.conf + (Math.random() - 0.5) * 0.1)));
+    }, 200);
+
+    return () => clearInterval(tick);
+  }, [d]);
+
+  return (
+    <AnimatePresence>
+      {entered && (
+        <motion.div
+          className="absolute"
+          style={{
+            left: `${d.x}%`,
+            top: `${d.y}%`,
+            width: `${d.w}%`,
+            height: `${d.h}%`,
+          }}
+          initial={{ opacity: 0, scale: 0.88 }}
+          animate={{
+            x: pos.x,
+            y: pos.y,
+            scale: active ? 1 : 0.95,
+            opacity: active ? 1 : 0,
+          }}
+          exit={{ opacity: 0, scale: 0.9 }}
+          transition={{
+            x: { duration: 0.3, ease: "easeOut" },
+            y: { duration: 0.3, ease: "easeOut" },
+            scale: { duration: 0.3, ease: [0.34, 1.4, 0.64, 1] },
+            opacity: { duration: active ? 0.2 : 0.1 },
+          }}
+        >
+          {/* Silhouette */}
+          <div
+            className="absolute rounded"
+            style={{
+              left: d.sil.left,
+              top: d.sil.top,
+              width: d.sil.w,
+              height: d.sil.h,
+              background: `rgba(255,255,255,${d.sil.opacity})`,
+            }}
+          />
+          {/* Border with glow */}
+          <div
+            className="absolute inset-0 rounded-sm"
+            style={{
+              border: `1.5px solid ${d.color}66`,
+              boxShadow: `0 0 6px ${d.color}25, 0 0 14px ${d.color}10`,
+            }}
+          />
+          {/* Label + confidence */}
+          <div
+            className="absolute -top-3.5 left-0 flex items-center gap-1 rounded-sm px-1 py-px font-mono text-[7px]"
+            style={{ background: `${d.color}25`, color: `${d.color}cc` }}
+          >
+            <span>{d.label}</span>
+            <span style={{ opacity: 0.6 }}>{conf.toFixed(2)}</span>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}
+
 /* ── Illustration: Real-Time Video Analysis ── */
+const analysisDetections: Detection[] = [
+  { x: 10, y: 15, w: 20, h: 40, label: "person", color: "#34d399", conf: 0.94,
+    drift: { freqX: 0.3, freqY: 0.18, amtX: 8, amtY: 12 },
+    sil: { left: "15%", top: "7.5%", w: "35%", h: "95%", opacity: 0.06 } },
+  { x: 55, y: 25, w: 16, h: 32, label: "person", color: "#34d399", conf: 0.87,
+    drift: { freqX: 0.22, freqY: 0.28, amtX: 6, amtY: 10 },
+    sil: { left: "12.5%", top: "9.4%", w: "37.5%", h: "87.5%", opacity: 0.045 } },
+  { x: 35, y: 58, w: 30, h: 18, label: "vehicle", color: "#60a5fa", conf: 0.91,
+    drift: { freqX: 0.15, freqY: 0.35, amtX: 14, amtY: 3 },
+    sil: { left: "6.7%", top: "11.1%", w: "86.7%", h: "66.7%", opacity: 0.03 } },
+];
+
 function AnalysisVisual() {
-  const boxes = [
-    { x: 10, y: 15, w: 20, h: 40, label: "person", color: "#34d399" },
-    { x: 55, y: 25, w: 16, h: 32, label: "person", color: "#34d399" },
-    { x: 35, y: 58, w: 30, h: 18, label: "vehicle", color: "#60a5fa" },
-  ];
+  const [active, setActive] = useState([true, true, true]);
+  const [entered, setEntered] = useState([false, false, false]);
+
+  useEffect(() => {
+    // Staggered detection entry
+    const timers = analysisDetections.map((_, i) =>
+      setTimeout(() => {
+        setEntered((prev) => { const n = [...prev]; n[i] = true; return n; });
+      }, 400 + i * 500)
+    );
+
+    // Random confidence drops → brief detection loss
+    const flicker = setInterval(() => {
+      const idx = Math.floor(Math.random() * analysisDetections.length);
+      if (Math.random() < 0.22) {
+        setActive((prev) => { const n = [...prev]; n[idx] = false; return n; });
+        setTimeout(() => {
+          setActive((prev) => { const n = [...prev]; n[idx] = true; return n; });
+        }, 120 + Math.random() * 200);
+      }
+    }, 2800);
+
+    return () => { timers.forEach(clearTimeout); clearInterval(flicker); };
+  }, []);
+
+  const personCount = analysisDetections.filter(
+    (d, i) => d.label === "person" && active[i] && entered[i]
+  ).length;
+  const vehicleCount = analysisDetections.filter(
+    (d, i) => d.label === "vehicle" && active[i] && entered[i]
+  ).length;
+
   return (
     <div className="relative h-full overflow-hidden rounded-lg bg-[#0a0a0a]">
       <div className="absolute inset-0 bg-gradient-to-br from-[#0d1117] via-[#0a0a0a] to-[#0d1117]" />
-      <div className="absolute inset-0 opacity-30">
-        <div className="absolute left-[13%] top-[18%] h-[38%] w-[7%] rounded bg-white/20" />
-        <div className="absolute left-[57%] top-[28%] h-[28%] w-[6%] rounded bg-white/15" />
-        <div className="absolute left-[37%] top-[60%] h-[12%] w-[26%] rounded bg-white/10" />
-      </div>
-      {boxes.map((d, i) => (
-        <div
-          key={i}
-          className="absolute"
-          style={{ left: `${d.x}%`, top: `${d.y}%`, width: `${d.w}%`, height: `${d.h}%` }}
-        >
-          <div className="h-full w-full rounded-sm border" style={{ borderColor: `${d.color}88` }} />
-          <div
-            className="absolute -top-3 left-0 rounded-sm px-1 font-mono text-[8px]"
-            style={{ background: `${d.color}30`, color: `${d.color}dd` }}
-          >
-            {d.label}
-          </div>
-        </div>
+      {analysisDetections.map((d, i) => (
+        <TrackingBox key={i} d={d} i={i} active={active[i]} entered={entered[i]} />
       ))}
       <div className="absolute left-3 top-2.5 flex items-center gap-1.5">
         <span className="h-1.5 w-1.5 rounded-full bg-red-400 animate-pulse" />
@@ -180,8 +316,16 @@ function AnalysisVisual() {
         YOLOv8 &middot; 8ms
       </div>
       <div className="absolute bottom-2.5 left-3 flex gap-3 font-mono text-[9px]">
-        <span className="text-emerald-400/60">2 persons</span>
-        <span className="text-blue-400/60">1 vehicle</span>
+        {personCount > 0 && (
+          <span className="text-emerald-400/60">
+            {personCount} {personCount === 1 ? "person" : "persons"}
+          </span>
+        )}
+        {vehicleCount > 0 && (
+          <span className="text-blue-400/60">
+            {vehicleCount} {vehicleCount === 1 ? "vehicle" : "vehicles"}
+          </span>
+        )}
       </div>
     </div>
   );
@@ -214,21 +358,39 @@ function AvatarsVisual() {
               <line key={i} x1={pts[a][0]} y1={pts[a][1]} x2={pts[b][0]} y2={pts[b][1]} stroke="rgba(96,165,250,0.35)" strokeWidth="0.5" />
             ))}
             {pts.map(([x, y], i) => (
-              <circle key={i} cx={x} cy={y} r="1" fill="rgba(96,165,250,0.7)" />
+              <circle
+                key={i}
+                cx={x}
+                cy={y}
+                r="1"
+                fill="rgba(96,165,250,0.7)"
+                style={{
+                  animation: "breathe 4s ease-in-out infinite",
+                  animationDelay: `${i * 0.15}s`,
+                }}
+              />
             ))}
           </svg>
           <div className="absolute left-1.5 top-1 font-mono text-[8px] text-blue-400/70">INPUT</div>
         </div>
 
         {/* Arrow */}
-        <svg className="h-3 w-4 flex-shrink-0 text-white/25" viewBox="0 0 16 12" fill="none">
+        <svg
+          className="h-3 w-4 flex-shrink-0 text-white/25"
+          viewBox="0 0 16 12"
+          fill="none"
+          style={{ animation: "arrowFlow 2.5s ease-in-out infinite" }}
+        >
           <path d="M0 6h12m0 0l-3-3m3 3l-3 3" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
 
         {/* Output */}
         <div className="relative h-[110px] w-[80px] flex-shrink-0 overflow-hidden rounded-md border border-white/[0.1] bg-[#131313]">
           <div className="absolute inset-0 flex items-center justify-center">
-            <div className="relative h-[55%] w-[45%] rounded-[50%] bg-gradient-to-b from-purple-500/[0.12] to-emerald-500/[0.08]">
+            <div
+              className="relative h-[55%] w-[45%] rounded-[50%] bg-gradient-to-b from-purple-500/[0.12] to-emerald-500/[0.08]"
+              style={{ animation: "breathe 4s ease-in-out infinite" }}
+            >
               <div className="absolute left-[20%] top-[30%] h-[8%] w-[18%] rounded-full bg-purple-400/30" />
               <div className="absolute right-[20%] top-[30%] h-[8%] w-[18%] rounded-full bg-purple-400/30" />
               <div className="absolute bottom-[26%] left-1/2 h-[3%] w-[28%] -translate-x-1/2 rounded-full bg-purple-400/20" />
@@ -260,13 +422,23 @@ function SyntheticDataVisual() {
 
       {/* 2x2 thumbnail grid */}
       <div className="absolute inset-x-3 top-3 bottom-10 grid grid-cols-2 gap-1.5">
-        {thumbnails.map((t) => (
+        {thumbnails.map((t, i) => (
           <div
             key={t.label}
             className={`relative overflow-hidden rounded-md border border-white/[0.1] bg-gradient-to-br ${t.from} ${t.to}`}
           >
             {/* Subtle noise texture */}
             <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGZpbHRlciBpZD0ibiI+PGZlVHVyYnVsZW5jZSB0eXBlPSJmcmFjdGFsTm9pc2UiIGJhc2VGcmVxdWVuY3k9IjAuOCIgbnVtT2N0YXZlcz0iNCIgLz48L2ZpbHRlcj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWx0ZXI9InVybCgjbikiIG9wYWNpdHk9IjAuMDMiLz48L3N2Zz4=')] opacity-50" />
+            {/* Shimmer overlay */}
+            <div
+              className="absolute inset-0"
+              style={{
+                background: "linear-gradient(90deg, transparent 30%, rgba(255,255,255,0.06) 50%, transparent 70%)",
+                backgroundSize: "200% 100%",
+                animation: "shimmer 4s ease-in-out infinite",
+                animationDelay: `${i * 0.6}s`,
+              }}
+            />
             <div className="absolute bottom-1 left-1.5 font-mono text-[7px] text-white/40">
               {t.label}
             </div>
@@ -275,7 +447,10 @@ function SyntheticDataVisual() {
       </div>
 
       {/* Progress counter */}
-      <div className="absolute bottom-2.5 left-3 font-mono text-[9px] text-amber-400/70">
+      <div
+        className="absolute bottom-2.5 left-3 font-mono text-[9px] text-amber-400/70"
+        style={{ animation: "breathe 2s ease-in-out infinite" }}
+      >
         2,847 / 10,000 frames
       </div>
       <div className="absolute bottom-2.5 right-3 flex gap-3 font-mono text-[9px]">
@@ -303,19 +478,35 @@ function PipelinesVisual() {
       {/* Pipeline node graph */}
       <div className="absolute inset-x-3 top-3 bottom-10 flex items-center justify-center">
         <svg viewBox="0 0 304 54" className="w-full max-w-[320px] h-auto" fill="none">
-          {/* Connection lines */}
+          {/* Connection lines + flowing data packets */}
           {nodes.slice(0, -1).map((node, i) => {
             const next = nodes[i + 1];
+            const x1 = node.x + nodeW;
+            const x2 = next.x;
+            const cy = nodeY + nodeH / 2;
             return (
-              <line
-                key={`line-${i}`}
-                x1={node.x + nodeW}
-                y1={nodeY + nodeH / 2}
-                x2={next.x}
-                y2={nodeY + nodeH / 2}
-                stroke="rgba(255,255,255,0.15)"
-                strokeWidth="1"
-              />
+              <g key={`conn-${i}`}>
+                <line
+                  x1={x1}
+                  y1={cy}
+                  x2={x2}
+                  y2={cy}
+                  stroke="rgba(255,255,255,0.15)"
+                  strokeWidth="1"
+                  strokeDasharray="4 4"
+                  style={{ animation: "dashFlow 1.5s linear infinite" }}
+                />
+                {/* Data packet */}
+                <circle r="2.5" cy={cy} fill="#40bf86">
+                  <animate attributeName="cx" from={x1} to={x2} dur="1.8s" begin={`${i * 0.6}s`} repeatCount="indefinite" />
+                  <animate attributeName="opacity" values="0;0.9;0.9;0" keyTimes="0;0.15;0.85;1" dur="1.8s" begin={`${i * 0.6}s`} repeatCount="indefinite" />
+                </circle>
+                {/* Second staggered packet */}
+                <circle r="2" cy={cy} fill="#40bf86">
+                  <animate attributeName="cx" from={x1} to={x2} dur="1.8s" begin={`${i * 0.6 + 0.9}s`} repeatCount="indefinite" />
+                  <animate attributeName="opacity" values="0;0.6;0.6;0" keyTimes="0;0.15;0.85;1" dur="1.8s" begin={`${i * 0.6 + 0.9}s`} repeatCount="indefinite" />
+                </circle>
+              </g>
             );
           })}
 
@@ -331,6 +522,7 @@ function PipelinesVisual() {
                 fill={node.active ? "rgba(24,121,78,0.25)" : "rgba(255,255,255,0.05)"}
                 stroke={node.active ? "rgba(24,121,78,0.7)" : "rgba(255,255,255,0.12)"}
                 strokeWidth="1"
+                style={node.active ? { animation: "breathe 4s ease-in-out infinite" } : undefined}
               />
               <text
                 x={node.x + nodeW / 2}
@@ -343,16 +535,6 @@ function PipelinesVisual() {
               >
                 {node.label}
               </text>
-              {/* Green pulse dot on active node */}
-              {node.active && (
-                <circle
-                  cx={node.x + nodeW / 2}
-                  cy={nodeY - 5}
-                  r="2.5"
-                  fill="#18794e"
-                  className="animate-pulse"
-                />
-              )}
             </g>
           ))}
         </svg>
@@ -434,9 +616,9 @@ export default function Capabilities() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
-          transition={{ staggerChildren: 0.12 }}
+          transition={{ staggerChildren: 0.06 }}
         >
-          <motion.div variants={fadeUp} transition={{ duration: 0.5 }}>
+          <motion.div variants={fadeUp} transition={{ duration: 0.4 }}>
             <SectionHeader
               label="Use Cases"
               title="What you can build"
@@ -450,15 +632,15 @@ export default function Capabilities() {
               <motion.div
                 key={cap.title}
                 variants={fadeUp}
-                transition={{ duration: 0.5 }}
-                className={`group overflow-hidden rounded-2xl border border-white/[0.08] bg-dark-card/80 transition-colors hover:border-green/20 md:col-span-1 ${colSpanClass[cap.colSpan]}`}
+                transition={{ duration: 0.4 }}
+                className={`group overflow-hidden rounded-xl border border-white/[0.07] bg-[#1a1a1a] transition-colors duration-200 hover:border-white/[0.12] md:col-span-1 ${colSpanClass[cap.colSpan]}`}
               >
                 <div className={`p-2.5 pb-0 ${cap.colSpan === 4 ? "h-[180px] lg:h-[240px]" : "h-[180px]"}`}>
                   <cap.Visual />
                 </div>
-                <div className="px-5 py-4">
-                  <h3 className="text-lg font-medium">{cap.title}</h3>
-                  <p className="mt-1.5 text-[13px] leading-relaxed text-white/50">
+                <div className="px-5 py-5">
+                  <h3 className="text-base font-medium text-white/90">{cap.title}</h3>
+                  <p className="mt-1.5 text-[13px] leading-relaxed text-white/40">
                     {cap.description}
                   </p>
                 </div>

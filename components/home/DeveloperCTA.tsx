@@ -39,7 +39,7 @@ const resources = [
 ];
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 32 },
+  hidden: { opacity: 0, y: 12 },
   visible: { opacity: 1, y: 0 },
 };
 
@@ -48,35 +48,25 @@ export default function DeveloperCTA() {
     <section className="relative py-24 lg:py-32">
       <div className="divider-gradient absolute top-0 left-0 right-0" />
 
-      {/* Bottom-weighted glow connecting into CommunityCTA */}
-      <div
-        className="pointer-events-none absolute inset-0"
-        aria-hidden="true"
-        style={{
-          background:
-            "radial-gradient(ellipse 70% 50% at 50% 80%, rgba(24,121,78,0.06) 0%, transparent 70%)",
-        }}
-      />
-
       <Container className="relative">
         <motion.div
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-80px" }}
-          transition={{ staggerChildren: 0.15 }}
+          transition={{ staggerChildren: 0.06 }}
         >
           <motion.div
             variants={fadeUp}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.4 }}
             className="mx-auto max-w-3xl text-center"
           >
-            <p className="mb-3 font-mono text-sm font-medium tracking-wider text-white/40 uppercase">
+            <p className="mb-4 font-mono text-xs font-medium tracking-wider text-white/30 uppercase">
               Developers
             </p>
-            <h2 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
+            <h2 className="text-4xl font-bold tracking-tight text-balance sm:text-5xl lg:text-6xl">
               Start building today
             </h2>
-            <p className="mx-auto mt-4 max-w-xl text-lg text-white/60">
+            <p className="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-white/50 text-pretty">
               Everything you need to integrate real-time video and AI processing
               into your application.
             </p>
@@ -90,7 +80,7 @@ export default function DeveloperCTA() {
             </div>
           </motion.div>
 
-          <div className="mt-16 grid gap-6 md:grid-cols-3">
+          <div className="mt-16 grid gap-4 md:grid-cols-3">
             {resources.map((resource) => (
               <motion.a
                 key={resource.title}
@@ -98,15 +88,15 @@ export default function DeveloperCTA() {
                 target="_blank"
                 rel="noopener noreferrer"
                 variants={fadeUp}
-                transition={{ duration: 0.5 }}
-                className="group rounded-2xl border border-dark-border bg-dark-card p-6 transition-colors hover:border-white/10"
+                transition={{ duration: 0.4 }}
+                className="group rounded-xl border border-white/[0.07] bg-[#1a1a1a] p-6 transition-colors duration-200 hover:border-white/[0.12]"
               >
                 <div className="text-green">{resource.icon}</div>
                 <h3 className="mt-4 text-lg font-medium">{resource.title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-white/50">
                   {resource.description}
                 </p>
-                <span className="mt-4 inline-flex items-center gap-1 text-sm text-green opacity-0 transition-opacity group-hover:opacity-100">
+                <span className="mt-4 inline-flex items-center gap-1 text-sm text-white/40 transition-colors group-hover:text-white/60">
                   Learn more <span aria-hidden="true">&rarr;</span>
                 </span>
               </motion.a>
