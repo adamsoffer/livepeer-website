@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 
 /**
  * Holographik image mask — THE core brand component.
@@ -33,6 +33,12 @@ export default function ImageMask({
   scanLine?: boolean;
   className?: string;
 }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    videoRef.current?.play().catch(() => {});
+  }, [video]);
+
   const tiles = useMemo(() => {
     return Array.from({ length: cols * rows }).map((_, i) => {
       const h =
@@ -63,6 +69,7 @@ export default function ImageMask({
           <div className="h-full w-full">{children}</div>
         ) : video ? (
           <video
+            ref={videoRef}
             src={video}
             autoPlay
             muted
