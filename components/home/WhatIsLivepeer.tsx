@@ -311,9 +311,9 @@ export default function WhatIsLivepeer() {
         >
           <motion.div variants={fadeUp} transition={{ duration: 0.4 }}>
             <SectionHeader
-              label="What is Livepeer"
-              title="The open GPU network for real-time AI video"
-              description="Livepeer is infrastructure purpose-built for AI inference on live video streams — where content is continuously generated, transformed, and interpreted in real time. Deploy pipelines on a distributed GPU network with low latency and elastic scaling."
+              label="The Network"
+              title="Deploy AI video pipelines with guaranteed performance"
+              description="Deploy real-time AI inference workflows to a global GPU network with published SLAs, elastic scaling, and pay-as-you-go pricing. No vendor lock-in — the network is open, permissionless, and built to run production workloads."
             />
           </motion.div>
 
