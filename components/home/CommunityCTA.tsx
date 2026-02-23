@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Container from "@/components/ui/Container";
 import Button from "@/components/ui/Button";
 import ImageMask from "@/components/ui/ImageMask";
+import GlowOverlay from "@/components/ui/GlowOverlay";
 import { EXTERNAL_LINKS } from "@/lib/constants";
 
 const channels = [
@@ -47,6 +48,9 @@ const fadeUp = {
 export default function CommunityCTA() {
   return (
     <section className="relative py-32 lg:py-44 overflow-hidden">
+      {/* Animated green glow */}
+      <GlowOverlay x={50} y={30} radius={70} opacity={0.2} duration={10} />
+
       {/* B&W Muybridge plate photo behind tile mask — bold background */}
       <div className="pointer-events-none absolute inset-0 opacity-15" aria-hidden="true">
         <ImageMask
