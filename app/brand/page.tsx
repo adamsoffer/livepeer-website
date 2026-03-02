@@ -622,38 +622,30 @@ export default function BrandPage() {
               </div>
             </motion.div>
 
-            {/* Usage notes */}
+            {/* Usage guidelines */}
             <motion.div
               variants={fadeUp}
               transition={{ duration: 0.5 }}
-              className="mt-8 grid gap-6 sm:grid-cols-3"
+              className="mt-12"
             >
+              <p className="mb-4 font-mono text-xs tracking-wider text-white/40 uppercase">
+                Guidelines
+              </p>
               <div className="rounded-xl border border-dark-border bg-dark-card p-6">
-                <p className="font-mono text-xs font-medium tracking-wider text-white/40 uppercase">
-                  Clear Space
-                </p>
-                <p className="mt-2 text-sm text-white/60">
-                  Minimum clear space equals the width of the symbol on all
-                  sides.
-                </p>
-              </div>
-              <div className="rounded-xl border border-dark-border bg-dark-card p-6">
-                <p className="font-mono text-xs font-medium tracking-wider text-white/40 uppercase">
-                  Placement
-                </p>
-                <p className="mt-2 text-sm text-white/60">
-                  Primary: top-left or bottom-left. Secondary: top-right,
-                  bottom-right, or center.
-                </p>
-              </div>
-              <div className="rounded-xl border border-dark-border bg-dark-card p-6">
-                <p className="font-mono text-xs font-medium tracking-wider text-white/40 uppercase">
-                  Avatars
-                </p>
-                <p className="mt-2 text-sm text-white/60">
-                  Green gradient bg + white symbol, black bg + white symbol, or
-                  white bg + black symbol.
-                </p>
+                <ul className="space-y-3 text-sm text-white/60">
+                  <li>
+                    <span className="font-mono text-xs font-medium tracking-wider text-white/40 uppercase">Clear Space</span>
+                    {" "}— Minimum clear space equals the width of the symbol on all sides.
+                  </li>
+                  <li>
+                    <span className="font-mono text-xs font-medium tracking-wider text-white/40 uppercase">Placement</span>
+                    {" "}— Primary: top-left or bottom-left. Secondary: top-right, bottom-right, or center.
+                  </li>
+                  <li>
+                    <span className="font-mono text-xs font-medium tracking-wider text-white/40 uppercase">Avatars</span>
+                    {" "}— Green gradient bg + white symbol, black bg + white symbol, or white bg + black symbol.
+                  </li>
+                </ul>
               </div>
             </motion.div>
 
