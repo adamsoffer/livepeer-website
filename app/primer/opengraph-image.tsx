@@ -83,27 +83,21 @@ export default async function OGImage() {
               viewBox="0 0 80 32"
               fill="none"
             >
-              {/* Curved shaft */}
+              {/* Curved shaft — ends before arrowhead */}
               <path
-                d="M4 26C18 8 42 4 64 16"
+                d="M4 26C18 8 42 4 58 14"
                 stroke="black"
                 strokeWidth="2"
                 strokeLinecap="round"
                 fill="none"
               />
-              {/* Arrowhead — asymmetric, top arm shorter */}
+              {/* Arrowhead — chevron with even arms, spaced from curve */}
               <path
-                d="M58 10L65 16"
+                d="M62 8L70 16L62 24"
                 stroke="black"
                 strokeWidth="2"
                 strokeLinecap="round"
-                fill="none"
-              />
-              <path
-                d="M65 16L56 22"
-                stroke="black"
-                strokeWidth="2"
-                strokeLinecap="round"
+                strokeLinejoin="round"
                 fill="none"
               />
             </svg>
