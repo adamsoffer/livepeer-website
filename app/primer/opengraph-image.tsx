@@ -85,7 +85,7 @@ export default async function OGImage() {
             >
               {/* Curved shaft — connects to chevron tip */}
               <path
-                d="M4 26C18 8 42 4 62 16"
+                d="M4 28C20 10 44 6 62 16"
                 stroke="black"
                 strokeWidth="2"
                 strokeLinecap="round"
