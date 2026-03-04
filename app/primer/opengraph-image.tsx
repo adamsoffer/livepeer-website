@@ -76,26 +76,26 @@ export default async function OGImage() {
             >
               A 10 MINUTE PRIMER
             </div>
-            {/* Hand-drawn curved arrow */}
+            {/* Hand-drawn arrow — gentle curve with pointed tip */}
             <svg
-              width="100"
-              height="40"
-              viewBox="0 0 100 40"
+              width="80"
+              height="30"
+              viewBox="0 0 80 30"
               fill="none"
             >
-              {/* Smooth sweeping curve */}
+              {/* Gentle rightward curve with slight bow */}
               <path
-                d="M6 32C16 12 40 2 68 8C76 10 82 14 88 20"
+                d="M4 20C20 10 40 8 62 14"
                 stroke="black"
-                strokeWidth="2.2"
+                strokeWidth="2"
                 strokeLinecap="round"
                 fill="none"
               />
-              {/* Arrowhead */}
+              {/* Arrowhead — two straight strokes */}
               <path
-                d="M82 12L89 20L80 23"
+                d="M56 8L63 14L56 20"
                 stroke="black"
-                strokeWidth="2.2"
+                strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 fill="none"
