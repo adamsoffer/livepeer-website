@@ -2,10 +2,9 @@
 
 import { useEffect, useRef } from "react";
 import { motion, useMotionValue, useMotionValueEvent, animate } from "framer-motion";
-import Button from "@/components/ui/Button";
 import Container from "@/components/ui/Container";
 import ImageMask from "@/components/ui/ImageMask";
-import { EXTERNAL_LINKS } from "@/lib/constants";
+import EarlyAccessCTA from "@/components/ui/EarlyAccessCTA";
 
 /*
   9×5 tile grid with square tiles.
@@ -291,17 +290,12 @@ export default function Hero() {
           </motion.p>
 
           <motion.div
-            className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row"
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
+            className="mt-10 w-full max-w-lg mx-auto"
+            initial={{ y: 12 }}
+            animate={{ y: 0 }}
             transition={{ duration: 0.5, delay: 0.6 }}
           >
-            <Button href="#" variant="primary">
-              Dashboard <span aria-hidden="true">&rarr;</span>
-            </Button>
-            <Button href={EXTERNAL_LINKS.docs} variant="secondary">
-              Documentation
-            </Button>
+            <EarlyAccessCTA />
           </motion.div>
         </motion.div>
       </Container>

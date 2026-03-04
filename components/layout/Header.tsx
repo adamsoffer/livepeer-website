@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LivepeerWordmark } from "@/components/icons/LivepeerLogo";
-import { NAV_ITEMS, EXTERNAL_LINKS } from "@/lib/constants";
+import { NAV_ITEMS } from "@/lib/constants";
 import type { NavItem } from "@/lib/constants";
 
 function NavLink({ item, pathname }: { item: NavItem; pathname: string }) {
@@ -151,30 +151,6 @@ export default function Header() {
             ))}
           </nav>
 
-          {/* Separator */}
-          <div className="hidden mx-1 h-5 w-px bg-white/10 md:block" />
-
-          {/* CTA */}
-          <a
-            href="#"
-            className="hidden md:inline-flex items-center gap-1.5 rounded-full bg-white px-4 py-1.5 text-sm font-medium text-dark transition-all hover:bg-white/90 active:bg-white/80"
-          >
-            Dashboard
-            <svg
-              className="h-3.5 w-3.5"
-              fill="none"
-              viewBox="0 0 12 12"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <path
-                d="M2 6h8m0 0L7 3m3 3L7 9"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </a>
-
           {/* Mobile hamburger */}
           <button
             className="relative flex h-9 w-9 items-center justify-center rounded-full transition-colors hover:bg-white/5 md:hidden"
@@ -299,15 +275,6 @@ export default function Header() {
                 </Link>
               );
             })}
-            <div className="mt-4">
-              <a
-                href="#"
-                className="flex w-full items-center justify-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-medium text-dark transition-colors hover:bg-white/90"
-              >
-                Dashboard
-                <span aria-hidden="true">&rarr;</span>
-              </a>
-            </div>
           </nav>
         </div>
       )}

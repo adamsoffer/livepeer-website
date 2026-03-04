@@ -150,6 +150,12 @@ body {
   50% { transform: translateX(3px); opacity: 0.5; }
 }
 
+/* CTA glow pulse — soft breathing green halo */
+@keyframes ctaGlow {
+  0%, 100% { box-shadow: 0 0 16px 0 rgba(30, 153, 96, 0.10), 0 0 32px 0 rgba(24, 121, 78, 0.05); }
+  50% { box-shadow: 0 0 20px 2px rgba(30, 153, 96, 0.18), 0 0 40px 4px rgba(24, 121, 78, 0.08); }
+}
+
 /* Text wrap utilities */
 .text-balance { text-wrap: balance; }
 .text-pretty { text-wrap: pretty; }
