@@ -428,7 +428,7 @@ export default function BuiltOnLivepeer() {
             <SectionHeader
               label="Ecosystem"
               title="An open and growing ecosystem"
-              description="Applications and platforms are building on the network to power video experiences — from AI-native creative tools to live streaming infrastructure."
+              description="From AI-native creative tools to autonomous avatars and agents — a growing ecosystem of applications built on Livepeer's open infrastructure."
               align="split"
             />
           </motion.div>
