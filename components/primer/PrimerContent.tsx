@@ -423,7 +423,7 @@ export default function PrimerContent({ stats }: { stats: ProtocolStats }) {
             <img
               src={`${IMG}/bob.svg`}
               alt="Bob"
-              className="w-full max-w-[330px]"
+              className="w-full max-w-[420px]"
             />
           </FlexSection>
 
