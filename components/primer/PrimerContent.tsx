@@ -70,6 +70,17 @@ export default function PrimerContent({ stats }: { stats: ProtocolStats }) {
     return () => document.removeEventListener("mousedown", handleClick);
   }, [tocOpen]);
 
+  // Scroll to chapter on page load if URL has a hash
+  useEffect(() => {
+    const hash = window.location.hash.slice(1);
+    if (hash) {
+      // Small delay to ensure DOM is ready
+      setTimeout(() => {
+        document.getElementById(hash)?.scrollIntoView({ behavior: "smooth" });
+      }, 100);
+    }
+  }, []);
+
   const scrollTo = useCallback(
     (id: string) => {
       document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
@@ -163,10 +174,15 @@ export default function PrimerContent({ stats }: { stats: ProtocolStats }) {
             }}
           >
             {CHAPTERS.map((ch, i) => (
-              <button
+              <a
                 key={ch.id}
-                onClick={() => scrollTo(ch.id)}
-                className="flex w-full items-center gap-3 rounded-md px-4 py-3 text-left transition-colors hover:bg-black/5"
+                href={`#${ch.id}`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollTo(ch.id);
+                  window.history.replaceState(null, "", `#${ch.id}`);
+                }}
+                className="flex w-full items-center gap-3 rounded-md px-4 py-3 text-left no-underline transition-colors hover:bg-black/5"
               >
                 <span
                   className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full text-xs font-bold text-black/60"
@@ -177,7 +193,7 @@ export default function PrimerContent({ stats }: { stats: ProtocolStats }) {
                 <span className="text-[15px] font-medium text-black/80">
                   {ch.label}
                 </span>
-              </button>
+              </a>
             ))}
           </div>
         )}
@@ -804,8 +820,9 @@ export default function PrimerContent({ stats }: { stats: ProtocolStats }) {
                   compute. Get an API key and start building with Livepeer.
                 </Text18>
                 <InvolvedButton
-                  href="https://docs.livepeer.org"
-                  label="Start building"
+                  href="/#early-access"
+                  label="Get Early Access"
+                  external={false}
                 />
               </InvolvedCard>
               <InvolvedCard
@@ -818,8 +835,8 @@ export default function PrimerContent({ stats }: { stats: ProtocolStats }) {
                   the network.
                 </Text18>
                 <InvolvedButton
-                  href="https://docs.livepeer.org"
-                  label="Run a node"
+                  href="https://docs.livepeer.org/v1/orchestrators/guides/get-started"
+                  label="Provide compute"
                 />
               </InvolvedCard>
               <InvolvedCard
@@ -828,7 +845,7 @@ export default function PrimerContent({ stats }: { stats: ProtocolStats }) {
               >
                 <Text18>Get Livepeer token</Text18>
                 <InvolvedButton
-                  href="https://explorer.livepeer.org"
+                  href="https://messari.io/project/livepeer/markets"
                   label="Get token"
                 />
                 <Text18>Stake token towards an Orchestrator</Text18>
@@ -1050,15 +1067,16 @@ function InvolvedCard({
 function InvolvedButton({
   href,
   label,
+  external = true,
 }: {
   href: string;
   label: string;
+  external?: boolean;
 }) {
   return (
     <Link
       href={href}
-      target="_blank"
-      rel="noopener noreferrer"
+      {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
       className="inline-block self-center rounded-md border-2 border-black px-6 py-2.5 text-sm font-bold uppercase text-black no-underline transition-all hover:bg-black hover:text-white"
       style={{ backgroundColor: "#ffd184" }}
     >
