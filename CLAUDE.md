@@ -1,6 +1,11 @@
 # CLAUDE.md
 
-**Stack:** Next.js 15, React 19, TypeScript, Tailwind CSS v4, Framer Motion 11. Package manager: npm. No test framework. No `.env` files needed.
+**Stack:** Next.js 15, React 19, TypeScript, Tailwind CSS v4, Framer Motion 11. Package manager: npm. No test framework.
+
+**Environment variables** (set in Vercel / `.env.local`):
+- `RESEND_API_KEY` — Resend email service (early access signups)
+- `RESEND_AUDIENCE_ID` — Resend audience/contact list
+- `THEGRAPH_API_KEY` — optional; authenticated subgraph requests for live protocol stats (falls back to hardcoded values)
 
 ## Commands
 
@@ -13,18 +18,21 @@
 
 ### `app/`
 
-- **Routes**: home (`/`), developers, lpt, community, blog, primer, brand
-- **Redirects**: blog, developers, lpt, community → `/` via `redirect()`
-- **Use cases**: `use-cases/` has 7 sub-routes — `world-models` is fully implemented, others are stubs. No `/use-cases` index page.
+- **Routes**: home (`/`), blog, blog/[slug], primer, foundation, brand
+- **Redirects**: developers, lpt, community → `/` via `redirect()`; use-cases/world-models → `/`
+- **API routes**: `api/early-access` — POST endpoint that creates contacts in a Resend audience
+- **Use cases**: `use-cases/` has 7 sub-routes — all currently redirect to home. No `/use-cases` index page.
 - **Layout**: `layout.tsx` wraps all pages with Header + Footer. Global metadata and font classes defined here.
-- **SEO**: OG image generated in `opengraph-image.tsx` via `next/og`. No per-page metadata on inner pages yet.
+- **SEO**: OG images generated via `next/og` at root and `/blog` levels. Primer and blog pages have per-page metadata.
 - **Styling**: `globals.css` — Tailwind v4 `@theme` block, utility classes, keyframe animations.
 
 ### `components/`
 
 - **`home/`** — self-contained homepage sections. Render order in `app/page.tsx`: Hero, Capabilities, WhatIsLivepeer, WhyLivepeer, BuiltOnLivepeer, NetworkStats, DeveloperCTA, CommunityCTA. (`NetworkParticipants.tsx` exists but is not currently rendered.)
-- **`layout/`** — Header, Footer.
-- **`ui/`** — shared primitives (Button, Card, Container, SectionHeader, Badge, ImageMask, GlowOverlay, etc.). Reuse these; don't create new wrappers for the same purpose. Also contains canvas components: `GenerativeCanvas.tsx` (GLSL shader), `LiveNetwork.tsx` (Canvas 2D particle trails), `AiVideoHero.tsx` (Sobel edge detection on video texture). All canvas components follow `useEffect` + `useRef<HTMLCanvasElement>` + `requestAnimationFrame` + cleanup.
+- **`layout/`** — Header, Footer. Header has headroom behavior on `/primer` (hides on scroll down, reveals on scroll up).
+- **`ui/`** — shared primitives (Button, Card, Container, SectionHeader, Badge, ImageMask, GlowOverlay, EarlyAccessCTA, etc.). Reuse these; don't create new wrappers for the same purpose. Also contains canvas components: `GenerativeCanvas.tsx` (GLSL shader), `LiveNetwork.tsx` (Canvas 2D particle trails), `AiVideoHero.tsx` (Sobel edge detection on video texture). All canvas components follow `useEffect` + `useRef<HTMLCanvasElement>` + `requestAnimationFrame` + cleanup.
+- **`blog/`** — blog listing page (`BlogListingClient`, `BlogCategoryFilter`, `BlogPostCard`) and post detail (`BlogPostHeader`, `BlogPostContent`).
+- **`primer/`** — 10-chapter educational primer with chapter navigation, scroll-based background color transitions, and live protocol stats from subgraph. Primer uses a light theme override. Components: `PrimerContent`, `InflationMeter`, `MintingDiagram`.
 - **`icons/`** — `LivepeerLogo.tsx` exports `LivepeerSymbol` (icon), `LivepeerWordmark` (text), `LivepeerLockup` (icon + text).
 
 ### `lib/`
@@ -32,12 +40,18 @@
 - `constants.ts` — `NAV_ITEMS` and `EXTERNAL_LINKS`
 - `fonts.ts` — Favorit Pro and Favorit Mono config via `next/font/local`
 - `useCountUp.ts` — IntersectionObserver-triggered count-up animation hook
+- `blog.ts` — blog content loading, markdown→HTML pipeline (gray-matter + unified/remark/rehype), reading time calculation
+- `subgraph.ts` — fetches live protocol stats (inflation, participation, supply) from The Graph Livepeer subgraph with hardcoded fallbacks
 
 ### `public/`
 
-- `images/` — static images and SVGs (including `primer/` subdirectory)
+- `images/` — static images and SVGs (including `primer/` and `blog/` subdirectories)
 - `videos/` — MP4 files for hero backgrounds and visual effects
 - `fonts/` — Favorit Pro (.woff2, .otf) and Favorit Mono (.woff2)
+
+### `content/`
+
+- `blog/` — markdown blog posts with YAML frontmatter (title, description, date, author, category, tags, image, draft). Draft posts are hidden in production.
 
 ### Reference docs
 
@@ -64,7 +78,8 @@
 
 - **No `next/image`** — use raw `<img>` tags. `ImageMask` needs direct CSS filter/absolute stacking that `next/image`'s wrapper breaks. Primer SVGs are incompatible with required width/height props. WebGL components use `<video>` as GPU textures. Don't introduce without discussion.
 - **No global state** — local `useState` only. No context providers, no state libraries.
-- **No external data fetching** — all content is static/hardcoded. No API routes, no CMS.
+- **No CMS** — page content is static/hardcoded. Blog posts are local markdown files, not fetched from an external CMS.
+- **Minimal server-side fetching** — the only external data sources are the Livepeer subgraph (protocol stats, ISR-cached) and Resend (email signups via API route). Don't add new external dependencies without discussion.
 
 ## Brand & Styling
 
@@ -80,7 +95,7 @@ Full spec in `brand-tokens.md` — colors, typography, logo rules, greyscale ram
 
 **Keyframes:** `breathe`, `node-pulse`, `scanLine`, `imageMaskFlow`
 
-Dark theme only. All pages use dark backgrounds with white/opacity text.
+Dark theme only — except `/primer`, which uses a light theme override with scroll-based background color transitions per chapter.
 
 ## Messaging
 
