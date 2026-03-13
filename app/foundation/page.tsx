@@ -70,11 +70,11 @@ function IllustrationStrategy() {
       <line x1="180" y1="20" x2="112" y2="58" stroke="rgba(255,255,255,0.30)" strokeWidth="1" />
       <line x1="20" y1="120" x2="88" y2="82" stroke="rgba(255,255,255,0.30)" strokeWidth="1" />
       <line x1="180" y1="120" x2="112" y2="82" stroke="rgba(255,255,255,0.30)" strokeWidth="1" />
-      {/* Arrow tips (small triangles at end of converging lines) */}
-      <polygon points="88,58 82,52 80,60" fill="rgba(255,255,255,0.30)" />
-      <polygon points="112,58 118,52 120,60" fill="rgba(255,255,255,0.30)" />
-      <polygon points="88,82 82,88 80,80" fill="rgba(255,255,255,0.30)" />
-      <polygon points="112,82 118,88 120,80" fill="rgba(255,255,255,0.30)" />
+      {/* Arrow tips — single shape rotated per line for perfect symmetry */}
+      <path d="M0,0 L-8,-4 L-8,4Z" fill="rgba(255,255,255,0.30)" transform="translate(88,58) rotate(29.2)" />
+      <path d="M0,0 L-8,-4 L-8,4Z" fill="rgba(255,255,255,0.30)" transform="translate(112,58) rotate(150.8)" />
+      <path d="M0,0 L-8,-4 L-8,4Z" fill="rgba(255,255,255,0.30)" transform="translate(88,82) rotate(-29.2)" />
+      <path d="M0,0 L-8,-4 L-8,4Z" fill="rgba(255,255,255,0.30)" transform="translate(112,82) rotate(-150.8)" />
       {/* Corner dots */}
       <circle cx="20" cy="20" r="3" fill="rgba(255,255,255,0.50)" />
       <circle cx="180" cy="20" r="3" fill="rgba(255,255,255,0.50)" />
@@ -537,7 +537,7 @@ export default function FoundationPage() {
             className="pointer-events-none absolute inset-0 h-full w-full object-cover"
             style={{
               objectPosition: "center 100%",
-              filter: "grayscale(60%) brightness(0.45) contrast(1.1)",
+              filter: "grayscale(70%) brightness(0.75) contrast(1.1)",
             }}
           />
 
@@ -561,13 +561,13 @@ export default function FoundationPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: "easeOut" }}
             >
-              <p className="mb-6 font-mono text-xs font-medium tracking-wider text-white/30 uppercase">
+              <p className="mb-6 font-mono text-xs font-medium tracking-wider text-white/60 uppercase">
                 The Livepeer Foundation
               </p>
               <h1 className="text-4xl font-bold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-7xl">
                 Stewarding the World&apos;s Open Video Infrastructure
               </h1>
-              <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-white/60 lg:text-xl text-pretty">
+              <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-white/65 lg:text-xl text-pretty">
                 The Livepeer Foundation is a neutral, non-profit steward of the
                 Livepeer protocol, coordinating long-term strategy, core
                 development and ecosystem growth to strengthen and expand the
