@@ -544,7 +544,7 @@ export default function FoundationPage() {
             }}
           />
 
-          <Container className="relative" style={{ zIndex: 16 }}>
+          <Container className="relative z-[16]">
             <motion.div
               className="mx-auto max-w-5xl text-center"
               initial={{ opacity: 0, y: 20 }}
