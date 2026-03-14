@@ -74,6 +74,20 @@
 - Videos use `autoPlay muted loop playsInline`.
 - `globals.css` includes `prefers-reduced-motion` to blanket-disable all animations.
 
+### Grid system — "Holographik" visual language
+
+The site's signature visual is a layered grid system that combines B&W video/imagery, geometric shapes, animated particle trails, and liquid glass effects. This creates an "outer space control room" aesthetic — technical, cinematic, and distinctly Livepeer.
+
+**Layer stack (bottom to top):**
+1. **Media layer** — B&W video or image with green tint, darkened (`ImageMask`)
+2. **Tile grid** — 9-column square grid with 1px white borders, overlaid on the media
+3. **Geometric shapes** — circles, crosshairs, and a starburst node positioned at grid intersections
+4. **Pulse trail** — an animated dot that traverses the grid lines and shape edges via SVG `getPointAtLength()`, creating a living-network feel
+5. **Liquid glass overlay** — frosted panel with subtle gradient fill, chromatic rainbow refraction, specular highlights, and corner crosshairs, snapped to grid lines
+6. **Content** — text, CTAs, rendered on top of everything
+
+**`ImageMask`** (`components/ui/ImageMask.tsx`) — Pure CSS grid, the core brand component. Uses `container-type: inline-size` with `100cqw / cols` row heights so tiles stay square relative to their container (not the viewport). Columns are `1fr`. Used on the homepage hero and brand page hero. The homepage overlays geometric shapes positioned with `${N * TILE}vw` units (`Hero.tsx`); the brand page uses percentage-based positions inside an `aspect-ratio: 9/5` wrapper. **Do not cap tile size independently on the homepage** — the vw-based positions of every overlay element depend on tiles spanning the full viewport. To control tile size on wide screens, adjust the column count or constrain the section width.
+
 ### Don't
 
 - **No `next/image`** — use raw `<img>` tags. `ImageMask` needs direct CSS filter/absolute stacking that `next/image`'s wrapper breaks. Primer SVGs are incompatible with required width/height props. WebGL components use `<video>` as GPU textures. Don't introduce without discussion.

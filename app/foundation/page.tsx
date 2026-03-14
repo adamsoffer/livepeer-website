@@ -412,6 +412,8 @@ function TileGrid({
   children?: React.ReactNode;
 }) {
   const gridRef = useRef<HTMLDivElement>(null);
+  const [tile, setTile] = useState(0);
+  const [gridOffsetX, setGridOffsetX] = useState(0);
   const [cutout, setCutout] = useState<{ top: number; bottom: number; left: number; right: number } | null>(null);
 
   const calculate = useCallback(() => {
@@ -420,17 +422,23 @@ function TileGrid({
     if (!grid || !target) return;
 
     const w = grid.offsetWidth;
-    const tile = w / 9;
+    const maxTile = 160;
+    const t = Math.min(w / 9, maxTile);
+    setTile(t);
+
+    // When tile is capped, grid is narrower than viewport — center it
+    const gridWidth = t * 9;
+    const offsetX = (w - gridWidth) / 2;
+    setGridOffsetX(offsetX);
+
     const targetTop = target.offsetTop;
     const targetBottom = targetTop + target.offsetHeight;
 
-    // Snap to grid lines: first line inside section, last line inside section
-    const top = Math.ceil(targetTop / tile) * tile;
-    const bottom = Math.floor(targetBottom / tile) * tile;
-    // Wider cutout on small screens (cols 1–8), narrower on large (cols 2–7)
+    const top = Math.ceil(targetTop / t) * t;
+    const bottom = Math.floor(targetBottom / t) * t;
     const isMobile = w < 768;
-    const left = (isMobile ? 1 : 2) * tile;
-    const right = (isMobile ? 8 : 7) * tile;
+    const left = offsetX + (isMobile ? 1 : 2) * t;
+    const right = offsetX + (isMobile ? 8 : 7) * t;
 
     setCutout({ top, bottom, left, right });
 
@@ -438,7 +446,7 @@ function TileGrid({
     const parent = grid.parentElement;
     if (parent) {
       const parentHeight = parent.scrollHeight;
-      const snappedHeight = Math.ceil(parentHeight / tile) * tile;
+      const snappedHeight = Math.ceil(parentHeight / t) * t;
       parent.style.minHeight = `${snappedHeight}px`;
     }
   }, [cutoutTargetRef]);
@@ -458,42 +466,79 @@ function TileGrid({
 
   return (
     <div ref={gridRef} className="pointer-events-none absolute inset-0 hidden md:block" aria-hidden="true" style={{ zIndex: 15 }}>
-      {/* Grid lines */}
-      <div
-        className="absolute inset-0"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(255,255,255,0.12) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.12) 1px, transparent 1px)",
-          backgroundSize: "11.11vw 11.11vw",
-        }}
-      />
+      {/* Grid lines — use JS-computed tile size so grid + cutout share the same math */}
+      {tile > 0 && (
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage:
+              "linear-gradient(rgba(255,255,255,0.12) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.12) 1px, transparent 1px)",
+            backgroundSize: `${tile}px ${tile}px`,
+            backgroundPosition: `${gridOffsetX}px 0`,
+          }}
+        />
+      )}
 
-      {/* Cutout + corner crosshairs + centered content */}
+      {/* Liquid glass overlay — grid lines visible through it */}
       {cutout && (
         <>
           <div
-            style={{
-              position: "absolute",
-              top: cutout.top + 1,
-              left: cutout.left + 1,
-              width: cutout.right - cutout.left - 1,
-              height: cutout.bottom - cutout.top - 1,
-              background: "#121212",
-            }}
-          />
-          {/* Content centered inside the cutout */}
-          <div
-            className="pointer-events-auto flex items-center justify-center"
             style={{
               position: "absolute",
               top: cutout.top,
               left: cutout.left,
               width: cutout.right - cutout.left,
               height: cutout.bottom - cutout.top,
-              zIndex: 16,
+              background: "linear-gradient(160deg, rgba(255,255,255,0.025) 0%, rgba(255,255,255,0.005) 40%, rgba(255,255,255,0.018) 100%)",
+              backdropFilter: "blur(1.5px)",
+              WebkitBackdropFilter: "blur(1.5px)",
+              boxShadow: "inset 0 1px 0 rgba(255,255,255,0.04), inset 0 -1px 0 rgba(255,255,255,0.015)",
+              border: "1px solid rgba(255,255,255,0.04)",
+              borderRadius: "2px",
+              overflow: "hidden",
             }}
           >
-            {children}
+            {/* Top glossy sheen */}
+            <div
+              style={{
+                position: "absolute",
+                inset: "0",
+                background: "linear-gradient(to bottom, rgba(255,255,255,0.02) 0%, transparent 30%)",
+                pointerEvents: "none",
+              }}
+            />
+            {/* Specular highlight — angled gloss strip */}
+            <div
+              style={{
+                position: "absolute",
+                top: 0,
+                left: "-20%",
+                width: "60%",
+                height: "100%",
+                background: "linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.015) 45%, rgba(255,255,255,0.005) 55%, transparent 60%)",
+                pointerEvents: "none",
+              }}
+            />
+            {/* Chromatic / rainbow refraction */}
+            <div
+              style={{
+                position: "absolute",
+                inset: "0",
+                background: "linear-gradient(135deg, rgba(255,0,0,0.015) 0%, rgba(255,165,0,0.012) 15%, rgba(255,255,0,0.012) 30%, rgba(0,255,100,0.015) 45%, rgba(0,150,255,0.015) 60%, rgba(130,0,255,0.012) 75%, rgba(255,0,100,0.012) 100%)",
+                pointerEvents: "none",
+                mixBlendMode: "screen",
+              }}
+            />
+            {/* Second refraction band — offset angle for depth */}
+            <div
+              style={{
+                position: "absolute",
+                inset: "0",
+                background: "radial-gradient(ellipse at 20% 30%, rgba(0,180,255,0.02) 0%, transparent 50%), radial-gradient(ellipse at 80% 70%, rgba(255,100,200,0.02) 0%, transparent 50%)",
+                pointerEvents: "none",
+                mixBlendMode: "screen",
+              }}
+            />
           </div>
           {crosshair(cutout.left, cutout.top)}
           {crosshair(cutout.right, cutout.top)}
@@ -527,7 +572,7 @@ export default function FoundationPage() {
             className="pointer-events-none absolute inset-0 h-full w-full object-cover"
             style={{
               objectPosition: "center 100%",
-              filter: "grayscale(70%) brightness(0.75) contrast(1.1)",
+              filter: "grayscale(70%) brightness(0.55) contrast(1.1)",
             }}
           />
 
