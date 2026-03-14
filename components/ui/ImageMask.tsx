@@ -47,7 +47,7 @@ export default function ImageMask({
   }, [cols, rows, seed]);
 
   return (
-    <div className={`relative overflow-hidden ${className}`}>
+    <div className={`relative overflow-hidden ${className}`} style={{ containerType: "inline-size" }}>
       {/* Layer 0: Dark green base */}
       <div
         className="absolute inset-0"
@@ -104,7 +104,7 @@ export default function ImageMask({
         style={{
           display: "grid",
           gridTemplateColumns: `repeat(${cols}, 1fr)`,
-          gridAutoRows: `calc(100vw / ${cols})`,
+          gridAutoRows: `calc(100cqw / ${cols})`,
         }}
       >
         {tiles.map((tile, i) => (

@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { motion, animate, useMotionValue, useMotionValueEvent } from "framer-motion";
 import Container from "@/components/ui/Container";
 import ImageMask from "@/components/ui/ImageMask";
 import {
@@ -21,6 +21,77 @@ const ROWS = 5;
 const CW = 100 / COLS;
 const CH = 100 / ROWS;
 const RAYS = [0, 22, 45, 68, 90, 135, 170, -15, -40, -70];
+
+/* ── Pulse trail for Combined layer demo ── */
+const DEMO_PULSE_PATH = [
+  "M 100 100",
+  "L 100 0",
+  "L 750 0",
+  "A 150 150 0 0 1 750 300",
+  "L 100 300",
+  "A 100 100 0 1 0 200 400",
+  "L 200 100",
+  "L 100 100",
+].join(" ");
+
+function PulseTrailDemo() {
+  const dotRef = useRef<HTMLDivElement>(null);
+  const pathRef = useRef<SVGPathElement>(null);
+  const progress = useMotionValue(0);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (dotRef.current) dotRef.current.style.opacity = "0.9";
+      animate(progress, 1, {
+        duration: 12,
+        ease: "linear",
+        repeat: Infinity,
+        repeatType: "loop",
+      });
+    }, 500);
+    return () => clearTimeout(timeout);
+  }, [progress]);
+
+  useMotionValueEvent(progress, "change", (v) => {
+    const path = pathRef.current;
+    const dot = dotRef.current;
+    if (!path || !dot) return;
+    const totalLength = path.getTotalLength();
+    const point = path.getPointAtLength(v * totalLength);
+    // SVG viewBox is 900×500; convert to percentages
+    dot.style.left = `${(point.x / 900) * 100}%`;
+    dot.style.top = `${(point.y / 500) * 100}%`;
+  });
+
+  return (
+    <>
+      <svg
+        width="0"
+        height="0"
+        viewBox="0 0 900 500"
+        style={{ position: "absolute", pointerEvents: "none" }}
+        aria-hidden="true"
+      >
+        <path ref={pathRef} d={DEMO_PULSE_PATH} fill="none" />
+      </svg>
+      <div
+        ref={dotRef}
+        className="absolute -translate-x-1/2 -translate-y-1/2 rounded-full"
+        style={{
+          left: `${(100 / 900) * 100}%`,
+          top: `${(100 / 500) * 100}%`,
+          opacity: 0,
+          width: "5px",
+          height: "5px",
+          background:
+            "radial-gradient(circle, rgba(64,191,134,0.9) 0%, rgba(64,191,134,0.3) 50%, transparent 70%)",
+          boxShadow:
+            "0 0 8px 2px rgba(64,191,134,0.4), 0 0 16px 4px rgba(64,191,134,0.15)",
+        }}
+      />
+    </>
+  );
+}
 
 const primaryColors = [
   { name: "Accent Green", hex: "#18794E", token: "green", bg: "bg-green" },
@@ -1060,7 +1131,267 @@ export default function BrandPage() {
         </Container>
       </section>
 
-      {/* Section 5: Gradients */}
+      {/* Section 5: Visual Language — Holographik Grid System */}
+      <section className="relative py-24 lg:py-32">
+        <div className="divider-gradient absolute top-0 right-0 left-0" />
+        <Container>
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ staggerChildren: 0.08 }}
+          >
+            <motion.div variants={fadeUp} transition={{ duration: 0.5 }}>
+              <p className="mb-3 font-mono text-xs font-medium tracking-wider text-green uppercase">
+                Visual Language
+              </p>
+              <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+                Holographik Grid System
+              </h2>
+              <p className="mt-4 max-w-2xl text-lg leading-relaxed text-white/60">
+                The site&apos;s signature visual combines B&W video/imagery, a 9-column square tile grid, geometric shapes, animated particle trails, and liquid glass effects into a layered &ldquo;control room&rdquo; aesthetic.
+              </p>
+            </motion.div>
+
+            {/* Layer stack — visual demo */}
+            <motion.div variants={fadeUp} transition={{ duration: 0.5 }} className="mt-16">
+              <p className="mb-6 font-mono text-xs tracking-wider text-white/40 uppercase">
+                Layer Stack (bottom to top)
+              </p>
+              <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+                {/* Layer 1: Media */}
+                <div>
+                  <div
+                    className="relative overflow-hidden rounded-lg border border-dark-border"
+                    style={{ aspectRatio: "9/5" }}
+                  >
+                    {/* Dark base */}
+                    <div
+                      className="absolute inset-0"
+                      style={{
+                        background:
+                          "linear-gradient(160deg, #030d09 0%, #051a10 40%, #071e14 100%)",
+                      }}
+                    />
+                    {/* B&W image, darkened */}
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src="/images/brand/galaxy.jpg"
+                      alt="NGC 4414 spiral galaxy — NASA/Hubble"
+                      className="absolute inset-0 h-full w-full object-cover"
+                      style={{
+                        filter: "grayscale(100%) contrast(1.1) brightness(0.5)",
+                      }}
+                    />
+                    {/* Green tint */}
+                    <div
+                      className="absolute inset-0"
+                      style={{
+                        background:
+                          "linear-gradient(160deg, rgba(24,121,78,0.22) 0%, rgba(13,61,43,0.32) 50%, rgba(24,121,78,0.18) 100%)",
+                        mixBlendMode: "multiply",
+                      }}
+                    />
+                  </div>
+                  <p className="mt-2 font-mono text-xs text-white/40">
+                    <span className="text-green/60">1</span>{" "}Media
+                  </p>
+                </div>
+
+                {/* Layer 2: Tile Grid */}
+                <div>
+                  <div
+                    className="relative overflow-hidden rounded-lg border border-dark-border"
+                    style={{ aspectRatio: "9/5", background: "#0a0a0a" }}
+                  >
+                    <div
+                      className="absolute inset-0"
+                      style={{
+                        backgroundImage:
+                          "linear-gradient(to right, rgba(255,255,255,0.18) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.18) 1px, transparent 1px)",
+                        backgroundSize: `${100 / 9}% ${100 / 5}%`,
+                      }}
+                    />
+                  </div>
+                  <p className="mt-2 font-mono text-xs text-white/40">
+                    <span className="text-green/60">2</span>{" "}Tile Grid
+                  </p>
+                </div>
+
+                {/* Layer 3: Geometric Shapes */}
+                <div>
+                  <div
+                    className="relative overflow-hidden rounded-lg border border-dark-border"
+                    style={{ aspectRatio: "9/5", background: "#0a0a0a" }}
+                  >
+                    {/* Large circle */}
+                    <div
+                      className="absolute rounded-full"
+                      style={{
+                        left: `${6 * CW}%`,
+                        top: "0%",
+                        width: `${3 * CW}%`,
+                        aspectRatio: "1",
+                        border: "1px solid rgba(255,255,255,0.15)",
+                      }}
+                    />
+                    {/* Small circle */}
+                    <div
+                      className="absolute rounded-full"
+                      style={{
+                        left: "0%",
+                        top: `${3 * CH}%`,
+                        width: `${2 * CW}%`,
+                        aspectRatio: "1",
+                        border: "1px solid rgba(255,255,255,0.10)",
+                      }}
+                    />
+                    {/* Starburst */}
+                    <div
+                      className="absolute rounded-full"
+                      style={{
+                        left: `calc(${CW}% - 6px)`,
+                        top: `calc(${CH}% - 6px)`,
+                        width: "12px",
+                        height: "12px",
+                        background:
+                          "radial-gradient(circle, rgba(64,191,134,0.3) 0%, transparent 70%)",
+                      }}
+                    />
+                    {RAYS.map((angle, i) => (
+                      <div
+                        key={`demo-ray-${i}`}
+                        className="absolute"
+                        style={{
+                          left: `${1 * CW}%`,
+                          top: `${1 * CH}%`,
+                          width: "40%",
+                          height: "1px",
+                          background:
+                            "linear-gradient(to right, rgba(255,255,255,0.12), transparent 60%)",
+                          transformOrigin: "0% 50%",
+                          transform: `rotate(${angle}deg)`,
+                        }}
+                      />
+                    ))}
+                  </div>
+                  <p className="mt-2 font-mono text-xs text-white/40">
+                    <span className="text-green/60">3</span>{" "}Shapes
+                  </p>
+                </div>
+
+                {/* Combined */}
+                <div>
+                  <div
+                    className="relative overflow-hidden rounded-lg border border-dark-border"
+                    style={{ aspectRatio: "9/5" }}
+                  >
+                    {/* Media */}
+                    <div
+                      className="absolute inset-0"
+                      style={{
+                        background:
+                          "linear-gradient(160deg, #030d09 0%, #051a10 40%, #071e14 100%)",
+                      }}
+                    />
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src="/images/brand/galaxy.jpg"
+                      alt=""
+                      className="absolute inset-0 h-full w-full object-cover"
+                      style={{
+                        filter: "grayscale(100%) contrast(1.1) brightness(0.5)",
+                      }}
+                    />
+                    <div
+                      className="absolute inset-0"
+                      style={{
+                        background:
+                          "linear-gradient(160deg, rgba(24,121,78,0.22) 0%, rgba(13,61,43,0.32) 50%, rgba(24,121,78,0.18) 100%)",
+                        mixBlendMode: "multiply",
+                      }}
+                    />
+                    {/* Grid */}
+                    <div
+                      className="absolute inset-0"
+                      style={{
+                        backgroundImage:
+                          "linear-gradient(to right, rgba(255,255,255,0.18) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.18) 1px, transparent 1px)",
+                        backgroundSize: `${100 / 9}% ${100 / 5}%`,
+                      }}
+                    />
+                    {/* Circle */}
+                    <div
+                      className="absolute rounded-full"
+                      style={{
+                        left: `${6 * CW}%`,
+                        top: "0%",
+                        width: `${3 * CW}%`,
+                        aspectRatio: "1",
+                        border: "1px solid rgba(255,255,255,0.35)",
+                      }}
+                    />
+                    {/* Small circle */}
+                    <div
+                      className="absolute rounded-full"
+                      style={{
+                        left: "0%",
+                        top: `${3 * CH}%`,
+                        width: `${2 * CW}%`,
+                        aspectRatio: "1",
+                        border: "1px solid rgba(255,255,255,0.25)",
+                      }}
+                    />
+                    {/* Starburst */}
+                    <div
+                      className="absolute rounded-full"
+                      style={{
+                        left: `calc(${CW}% - 6px)`,
+                        top: `calc(${CH}% - 6px)`,
+                        width: "12px",
+                        height: "12px",
+                        background:
+                          "radial-gradient(circle, rgba(64,191,134,0.5) 0%, transparent 70%)",
+                      }}
+                    />
+                    {RAYS.map((angle, i) => (
+                      <div
+                        key={`combined-ray-${i}`}
+                        className="absolute"
+                        style={{
+                          left: `${1 * CW}%`,
+                          top: `${1 * CH}%`,
+                          width: "40%",
+                          height: "1px",
+                          background:
+                            "linear-gradient(to right, rgba(255,255,255,0.25), transparent 60%)",
+                          transformOrigin: "0% 50%",
+                          transform: `rotate(${angle}deg)`,
+                        }}
+                      />
+                    ))}
+                    {/* Pulse trail */}
+                    <PulseTrailDemo />
+                    {/* Vignette */}
+                    <div
+                      className="absolute inset-0"
+                      style={{
+                        background:
+                          "radial-gradient(ellipse 75% 70% at 50% 50%, transparent 30%, rgba(6,6,6,0.7) 100%)",
+                      }}
+                    />
+                  </div>
+                  <p className="mt-2 font-mono text-xs text-white/40">
+                    <span className="text-green/60">=</span>{" "}Combined
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        </Container>
+      </section>
+
+      {/* Section 6: Gradients */}
       <section className="relative py-24 lg:py-32">
         <div className="divider-gradient absolute top-0 left-0 right-0" />
         <Container>
