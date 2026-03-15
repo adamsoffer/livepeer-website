@@ -470,6 +470,7 @@ export default function BuiltOnLivepeer() {
               label="Ecosystem"
               title="Powering the next wave of real-time AI video apps"
               description="From AI-native creative tools to autonomous avatars and agents — a growing ecosystem of applications built on Livepeer's open infrastructure."
+              align="split"
             />
           </motion.div>
 
