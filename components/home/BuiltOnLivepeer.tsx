@@ -28,37 +28,19 @@ function DaydreamLogo({ className }: { className?: string }) {
   );
 }
 
-function StudioLogo({ className }: { className?: string }) {
+function FrameworksLogo({ className }: { className?: string }) {
   return (
-    <svg
-      className={className}
-      width="112"
-      height="28"
-      viewBox="0 0 112 28"
-      fill="none"
-    >
-      <path d="M27.7245 12.9546V0.631836H30.1511V10.8407H37.264V12.9546H27.7245Z" fill="white" />
-      <path d="M38.7062 12.9546V0.631836H41.1329V12.9546H38.7062Z" fill="white" />
-      <path d="M52.3521 0.631836H55.0161L50.2947 12.9546H47.1471L42.3202 0.631836H45.037L48.7736 10.4626L52.3521 0.631836Z" fill="white" />
-      <path d="M56.2561 12.9546V7.87488H58.6828V5.70968H56.2561V0.631836H65.7957V2.74579H58.6828V5.70968H64.7142V7.87488H58.6828V10.8407H65.9803V12.9546H56.2561Z" fill="white" />
-      <path d="M67.8006 12.9546V0.631836H73.4716C75.9246 0.631836 77.5248 1.84837 77.5248 4.27684C77.5248 6.43432 75.9246 7.88779 73.4716 7.88779H70.2273V12.9546H67.8006ZM70.2273 5.69698H73.199C74.4299 5.69698 75.0893 5.1149 75.0893 4.25122C75.0893 3.32151 74.4299 2.74579 73.199 2.74579H70.2273V5.69698Z" fill="white" />
-      <path d="M79.1869 12.9546V7.87488H81.6135V5.70968H79.1869V0.631836H88.7264V2.74579H81.6135V5.70968H87.6449V7.87488H81.6135V10.8407H88.911V12.9546H79.1869Z" fill="white" />
-      <path d="M90.7313 12.9546V7.87488H93.158V5.70968H90.7313V0.631836H100.271V2.74579H93.158V5.70968H99.1894V7.87488H93.158V10.8407H100.455V12.9546H90.7313Z" fill="white" />
-      <path d="M102.276 12.9546V0.631836H108.131C110.35 0.632284 112 1.69461 112 3.70141C112 5.23015 111.297 6.1599 109.855 6.68409C111.165 6.68409 111.815 7.26844 111.815 8.42853V12.9546H109.389V9.02147C109.389 8.13636 109.125 7.87856 108.219 7.87856H104.702V12.9546H102.276ZM104.702 5.70509H107.41C108.826 5.70509 109.565 5.243 109.565 4.23372C109.565 3.22443 108.852 2.74579 107.41 2.74579H104.702V5.70509Z" fill="white" />
-      <path d="M26.7639 23.2386H29.1136C29.1984 24.4675 30.1145 25.3788 31.8959 25.3788H32.0655C33.3379 25.3788 34.0505 24.7183 34.0505 23.9241C34.0505 23.1968 33.7196 22.8122 32.6763 22.6032L30.5047 22.1601C28.3756 21.717 27.3746 20.5299 27.3746 18.699C27.3407 16.8765 29.1051 15.0707 31.9807 15.1042C34.8648 15.0791 36.6122 16.7678 36.5868 19.0418H34.2371C34.1607 17.8296 33.27 17.1608 31.9807 17.1608H31.8026C30.5386 17.1608 29.7243 17.8379 29.7243 18.6154C29.7243 19.3929 30.1485 19.7608 31.2003 19.9698L33.0241 20.3292C35.1871 20.7556 36.3916 21.8675 36.3916 23.7485C36.4171 25.8051 34.6357 27.4521 31.7177 27.427C28.4434 27.427 26.8657 25.7717 26.7639 23.2386Z" fill="white" />
-      <path d="M41.4342 27.2598V17.328H37.2353V15.2714H48.0082V17.328H43.7838V27.2598H41.4342Z" fill="white" />
-      <path d="M49.3414 23.063V15.2714H51.6826V22.7202C51.6826 24.5846 52.4375 25.3788 54.0322 25.3788H54.2019C55.7881 25.3788 56.5516 24.5846 56.5516 22.7202V15.2714H58.8928V23.063C58.8928 25.872 57.3405 27.427 54.1171 27.427C50.8937 27.427 49.3414 25.872 49.3414 23.063Z" fill="white" />
-      <path d="M60.8038 27.2598V15.2714H64.9687C68.6417 15.2546 71.161 17.4032 71.1356 21.2656C71.161 25.1363 68.7181 27.2849 65.062 27.2598H60.8038ZM63.145 25.2032H64.7991C66.063 25.2032 67.047 24.9022 67.7425 24.3003C68.4466 23.6984 68.7944 22.6868 68.7944 21.2656C68.7944 19.8527 68.4466 18.8411 67.7425 18.2392C67.047 17.6289 66.063 17.328 64.7991 17.328H63.145V25.2032Z" fill="white" />
-      <path d="M72.3564 27.2598V15.2714H74.6976V27.2598H72.3564Z" fill="white" />
-      <path d="M76.087 21.2656C76.0531 17.4868 78.53 15.0624 81.9909 15.1042C85.4518 15.0624 87.9457 17.4868 87.9033 21.2656C87.9457 25.0444 85.4518 27.4688 81.9909 27.427C78.53 27.4688 76.0531 25.0444 76.087 21.2656ZM81.9061 25.3788H82.0842C84.2473 25.3788 85.5536 23.8238 85.5536 21.2656C85.5536 18.699 84.2473 17.1608 82.0842 17.1608H81.9061C79.743 17.1608 78.4367 18.699 78.4367 21.2656C78.4367 23.8238 79.743 25.3788 81.9061 25.3788Z" fill="white" />
-      {/* Diamond symbol */}
-      <path d="M0 6.83208V2.87255H4.00769V6.83208H0Z" fill="white" />
-      <path d="M7.35362 11.4427V7.48319H11.3613V11.4427H7.35362Z" fill="white" />
-      <path d="M14.7072 16.0584V12.0988H18.7149V16.0584H14.7072Z" fill="white" />
-      <path d="M7.35362 20.664V16.7045H11.3613V20.664H7.35362Z" fill="white" />
-      <path d="M0 25.2797V21.3201H4.00769V25.2797H0Z" fill="white" />
-      <path d="M0 16.0584V12.0988H4.00769V16.0584H0Z" fill="white" />
-    </svg>
+    <div className={`flex items-center gap-2 ${className ?? ""}`}>
+      {/* Interlocking brackets mark */}
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <path d="M3 4L7 10L3 16" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M17 4L13 10L17 16" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        <line x1="8" y1="14" x2="12" y2="6" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+      </svg>
+      <span className="text-[17px] font-bold tracking-tight text-white">
+        Frameworks
+      </span>
+    </div>
   );
 }
 
@@ -94,76 +76,129 @@ function EmbodyLogo({ className }: { className?: string }) {
 
 /* ── Product visual: Daydream — real-time AI video ── */
 function DaydreamVisual() {
+  const frames = [
+    { label: "Input", gradient: "from-orange-500/20 to-orange-600/5" },
+    { label: "Depth", gradient: "from-cyan-500/15 to-cyan-600/5" },
+    { label: "Style", gradient: "from-orange-400/20 to-cyan-500/10" },
+    { label: "Output", gradient: "from-cyan-400/20 to-orange-500/10" },
+  ];
+
   return (
-    <div className="relative h-[220px] overflow-hidden bg-[#121212]">
-      {/* Gradient blobs — Daydream brand: orange + cyan */}
+    <div className="relative h-full min-h-[220px] overflow-hidden bg-[#0e0e0e]">
+      {/* Ambient glow */}
       <div
-        className="absolute h-[200px] w-[200px] rounded-full opacity-30 blur-[80px]"
-        style={{ left: "10%", top: "-20%", background: "#ff982e" }}
+        className="absolute h-[300px] w-[300px] rounded-full opacity-20 blur-[100px]"
+        style={{ left: "20%", top: "10%", background: "#ff982e" }}
       />
       <div
-        className="absolute h-[160px] w-[160px] rounded-full opacity-20 blur-[70px]"
-        style={{ right: "5%", bottom: "-10%", background: "#1ff4ff" }}
+        className="absolute h-[250px] w-[250px] rounded-full opacity-15 blur-[90px]"
+        style={{ right: "10%", bottom: "5%", background: "#1ff4ff" }}
       />
 
-      {/* Canvas viewport */}
-      <div className="absolute inset-4 rounded-md border border-white/[0.08]">
-        {/* Generated scene — abstract flowing forms */}
-        <svg
-          className="absolute inset-0 h-full w-full"
-          viewBox="0 0 400 200"
-          preserveAspectRatio="xMidYMid slice"
-          fill="none"
-        >
-          <path
-            d="M-20 110 C80 50, 160 170, 240 90 S380 130, 420 70"
-            stroke="rgba(255,152,46,0.25)"
-            strokeWidth="1.5"
-          />
-          <path
-            d="M-20 150 C100 90, 180 190, 280 120 S400 160, 440 100"
-            stroke="rgba(31,244,255,0.15)"
-            strokeWidth="1"
-          />
-          <path
-            d="M-40 70 C60 30, 140 110, 220 50 S360 90, 440 40"
-            stroke="rgba(255,255,255,0.04)"
-            strokeWidth="0.8"
-          />
-          {/* Nodes */}
-          {[
-            [80, 68, "#ff982e"], [160, 130, "#1ff4ff"], [240, 90, "#ff982e"],
-            [320, 108, "#1ff4ff"], [120, 118, "#ff982e"], [200, 155, "#1ff4ff"],
-          ].map(([x, y, c], i) => (
-            <circle
-              key={i}
-              cx={x as number}
-              cy={y as number}
-              r={i % 2 === 0 ? 2.5 : 1.8}
-              fill={`${c}66`}
-            />
-          ))}
-        </svg>
-
-        {/* Timeline */}
-        <div className="absolute bottom-0 left-0 right-0 flex items-center gap-2 border-t border-white/[0.06] bg-black/40 px-3 py-1.5">
-          <div className="h-1 flex-1 rounded-full bg-white/[0.06]">
-            <div className="h-full w-[45%] rounded-full" style={{ background: "linear-gradient(to right, #ff982e, #1ff4ff)" }} />
+      {/* Main canvas area */}
+      <div className="absolute inset-4 flex flex-col">
+        {/* Toolbar */}
+        <div className="flex items-center justify-between rounded-t-md border border-b-0 border-white/[0.08] bg-black/30 px-3 py-2">
+          <div className="flex items-center gap-1.5">
+            <span className="h-1.5 w-1.5 rounded-full animate-pulse" style={{ background: "#ff982e" }} />
+            <span className="font-mono text-[9px] uppercase" style={{ color: "rgba(255,152,46,0.6)" }}>
+              Generating
+            </span>
           </div>
-          <span className="font-mono text-[8px] text-white/25">02:34</span>
+          <div className="flex items-center gap-2">
+            <span className="font-mono text-[8px] text-white/20">1920×1080</span>
+            <span className="font-mono text-[8px] text-white/20">30fps</span>
+            <span className="rounded bg-white/[0.06] px-1.5 py-0.5 font-mono text-[8px] text-cyan-400/50">GPU×4</span>
+          </div>
+        </div>
+
+        {/* Video preview area — large central frame */}
+        <div className="relative flex-1 rounded-b-md border border-white/[0.08] bg-black/20">
+          {/* Abstract "generated scene" — layered geometric shapes */}
+          <svg
+            className="absolute inset-0 h-full w-full"
+            viewBox="0 0 500 300"
+            preserveAspectRatio="xMidYMid slice"
+            fill="none"
+          >
+            {/* Landscape horizon */}
+            <path
+              d="M0 200 Q60 140, 120 170 T240 150 T360 160 T500 130 V300 H0 Z"
+              fill="rgba(255,152,46,0.06)"
+            />
+            <path
+              d="M0 220 Q80 180, 160 200 T320 185 T500 170 V300 H0 Z"
+              fill="rgba(31,244,255,0.04)"
+            />
+            {/* Flowing energy lines */}
+            <path d="M0 140 C80 90, 180 180, 280 120 S420 150, 500 100" stroke="rgba(255,152,46,0.2)" strokeWidth="1.5" />
+            <path d="M0 170 C100 130, 200 200, 320 150 S460 180, 500 140" stroke="rgba(31,244,255,0.12)" strokeWidth="1" />
+            <path d="M0 110 C120 60, 220 130, 340 80 S480 110, 500 70" stroke="rgba(255,255,255,0.04)" strokeWidth="0.8" />
+            {/* Scattered particles */}
+            {[
+              [60, 120, "#ff982e", 3], [140, 95, "#1ff4ff", 2],
+              [230, 140, "#ff982e", 2.5], [310, 110, "#1ff4ff", 2],
+              [380, 130, "#ff982e", 1.8], [440, 100, "#1ff4ff", 3],
+              [100, 160, "#ff982e", 1.5], [270, 170, "#1ff4ff", 2],
+              [190, 115, "#ff982e", 2], [350, 155, "#1ff4ff", 1.5],
+            ].map(([x, y, c, r], i) => (
+              <circle key={i} cx={x as number} cy={y as number} r={r as number} fill={`${c}44`} />
+            ))}
+            {/* Central bright node */}
+            <circle cx="250" cy="135" r="6" fill="rgba(255,152,46,0.15)" />
+            <circle cx="250" cy="135" r="3" fill="rgba(255,152,46,0.3)" />
+            <circle cx="250" cy="135" r="18" fill="none" stroke="rgba(255,152,46,0.08)" strokeWidth="0.5" />
+          </svg>
+
+          {/* Pipeline frame strip at bottom */}
+          <div className="absolute inset-x-0 bottom-0 border-t border-white/[0.06] bg-black/50 px-3 py-2">
+            <div className="flex gap-2">
+              {frames.map((f, i) => (
+                <div key={i} className="flex-1">
+                  <div className={`aspect-video rounded border border-white/[0.08] bg-gradient-to-br ${f.gradient}`}>
+                    {/* Mini abstract content per frame */}
+                    <svg className="h-full w-full" viewBox="0 0 80 45" fill="none">
+                      {i === 0 && (
+                        <>
+                          <rect x="20" y="10" width="40" height="25" rx="2" fill="rgba(255,255,255,0.06)" />
+                          <circle cx="40" cy="22" r="8" fill="rgba(255,152,46,0.15)" />
+                        </>
+                      )}
+                      {i === 1 && (
+                        <>
+                          <path d="M0 35 Q20 15, 40 25 T80 18" stroke="rgba(31,244,255,0.3)" strokeWidth="1" fill="none" />
+                          <path d="M0 40 Q30 20, 50 30 T80 25" stroke="rgba(31,244,255,0.15)" strokeWidth="0.8" fill="none" />
+                        </>
+                      )}
+                      {i === 2 && (
+                        <>
+                          <rect x="15" y="8" width="50" height="30" rx="2" fill="rgba(255,152,46,0.08)" />
+                          <path d="M20 30 Q40 12, 60 28" stroke="rgba(255,152,46,0.25)" strokeWidth="1" fill="none" />
+                        </>
+                      )}
+                      {i === 3 && (
+                        <>
+                          <rect x="10" y="5" width="60" height="35" rx="2" fill="rgba(31,244,255,0.06)" />
+                          <circle cx="40" cy="22" r="10" fill="rgba(255,152,46,0.1)" />
+                          <circle cx="40" cy="22" r="5" fill="rgba(31,244,255,0.15)" />
+                        </>
+                      )}
+                    </svg>
+                  </div>
+                  <div className="mt-1 flex items-center justify-between">
+                    <span className="font-mono text-[7px] text-white/25">{f.label}</span>
+                    {i < 3 && <span className="font-mono text-[7px] text-white/15">&rarr;</span>}
+                    {i === 3 && <span className="h-1 w-1 rounded-full bg-emerald-400/50" />}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* HUD */}
-      <div className="absolute left-7 top-7 flex items-center gap-1.5">
-        <span className="h-1.5 w-1.5 rounded-full animate-pulse" style={{ background: "#ff982e" }} />
-        <span className="font-mono text-[9px] uppercase" style={{ color: "rgba(255,152,46,0.6)" }}>
-          Generating
-        </span>
-      </div>
-
       {/* Bottom gradient + logo */}
-      <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#121212] to-transparent" />
+      <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-[#0e0e0e] via-[#0e0e0e]/80 to-transparent" />
       <div className="absolute bottom-3.5 left-5">
         <DaydreamLogo />
       </div>
@@ -171,7 +206,7 @@ function DaydreamVisual() {
   );
 }
 
-/* ── Product visual: Livepeer Studio — developer gateway ── */
+/* ── Product visual: Frameworks — developer tools ── */
 function StudioVisual() {
   return (
     <div className="relative h-[220px] overflow-hidden bg-[#0a0a0a]">
@@ -235,7 +270,7 @@ function StudioVisual() {
       {/* Bottom gradient + logo */}
       <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/90 to-transparent" />
       <div className="absolute bottom-3 left-5">
-        <StudioLogo className="h-5 w-auto opacity-90" />
+        <FrameworksLogo className="h-5 w-auto opacity-90" />
       </div>
     </div>
   );
@@ -384,6 +419,7 @@ function EmbodyVisual() {
 const projects = [
   {
     Visual: DaydreamVisual,
+    Logo: DaydreamLogo,
     description:
       "APIs for building interactive AI experiences — from video to games and beyond.",
     href: "https://daydream.live",
@@ -391,13 +427,15 @@ const projects = [
   },
   {
     Visual: StudioVisual,
+    Logo: FrameworksLogo,
     description:
-      "APIs for livestreaming, on-demand video, and AI-powered video processing at scale.",
-    href: "https://livepeer.studio",
-    linkLabel: "Visit Studio",
+      "Stream without the cloud. A next-generation video platform that delivers broadcast-quality streaming directly on Livepeer's open GPU network.",
+    href: "https://frameworks.network",
+    linkLabel: "Visit Frameworks",
   },
   {
     Visual: StreamplaceVisual,
+    Logo: StreamplaceLogo,
     description:
       "The video layer for decentralized social networks. Open-source infrastructure for high-quality video on the AT Protocol.",
     href: "https://stream.place",
@@ -405,6 +443,7 @@ const projects = [
   },
   {
     Visual: EmbodyVisual,
+    Logo: EmbodyLogo,
     description:
       "Embodied AI avatars for real-time tutoring, telepresence, and branded content powered by Livepeer infrastructure.",
     href: "https://embody.zone",
@@ -413,6 +452,8 @@ const projects = [
 ];
 
 export default function BuiltOnLivepeer() {
+  const [featured, ...rest] = projects;
+
   return (
     <section className="relative py-24 lg:py-32">
       <div className="divider-gradient absolute top-0 left-0 right-0" />
@@ -429,12 +470,42 @@ export default function BuiltOnLivepeer() {
               label="Ecosystem"
               title="Powering the next wave of real-time AI video apps"
               description="From AI-native creative tools to autonomous avatars and agents — a growing ecosystem of applications built on Livepeer's open infrastructure."
-              align="split"
             />
           </motion.div>
 
-          <div className="mt-20 grid gap-4 sm:grid-cols-2">
-            {projects.map((project, i) => (
+          {/* Bento grid: featured card + 3 smaller cards */}
+          <div className="mt-20 grid gap-4 lg:grid-cols-2 lg:grid-rows-3">
+            {/* Featured — Daydream (spans all 3 rows on desktop) */}
+            <motion.div
+              variants={fadeUp}
+              transition={{ duration: 0.4 }}
+              className="lg:row-span-3"
+            >
+              <a
+                href={featured.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex h-full flex-col overflow-hidden rounded-xl border border-white/[0.07] bg-[#1a1a1a] transition-colors duration-200 hover:border-white/[0.12]"
+              >
+                <div className="relative flex-1 min-h-[220px]">
+                  <div className="absolute inset-0">
+                    <featured.Visual />
+                  </div>
+                </div>
+                <div className="px-6 py-5">
+                  <p className="text-sm leading-relaxed text-white/50">
+                    {featured.description}
+                  </p>
+                  <span className="mt-3 inline-flex items-center gap-1 text-[13px] font-medium text-green-bright transition-colors group-hover:text-green-light">
+                    {featured.linkLabel}
+                    <span aria-hidden="true">&rarr;</span>
+                  </span>
+                </div>
+              </a>
+            </motion.div>
+
+            {/* 3 smaller cards stacked on the right */}
+            {rest.map((project, i) => (
               <motion.div
                 key={i}
                 variants={fadeUp}
@@ -444,11 +515,11 @@ export default function BuiltOnLivepeer() {
                   href={project.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group block h-full overflow-hidden rounded-xl border border-white/[0.07] bg-[#1a1a1a] transition-colors duration-200 hover:border-white/[0.12]"
+                  className="group flex h-full flex-col overflow-hidden rounded-xl border border-white/[0.07] bg-[#1a1a1a] transition-colors duration-200 hover:border-white/[0.12]"
                 >
-                  <project.Visual />
-                  <div className="px-5 py-4">
-                    <p className="text-[13px] leading-relaxed text-white/50">
+                  <div className="px-5 pt-5 pb-4">
+                    <project.Logo />
+                    <p className="mt-3 text-[13px] leading-relaxed text-white/50">
                       {project.description}
                     </p>
                     <span className="mt-3 inline-flex items-center gap-1 text-[13px] font-medium text-green-bright transition-colors group-hover:text-green-light">
