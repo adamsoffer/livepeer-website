@@ -84,11 +84,6 @@ const nextConfig: NextConfig = {
         permanent: false,
       },
       {
-        source: "/developers/quick-start",
-        destination: "https://docs.livepeer.org",
-        permanent: false,
-      },
-      {
         source: "/jobs",
         destination: "/",
         permanent: false,
