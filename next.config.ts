@@ -103,11 +103,6 @@ const nextConfig: NextConfig = {
         destination: "/primer",
         permanent: false,
       },
-      {
-        source: "/reference/:path*",
-        destination: "https://docs.livepeer.org",
-        permanent: false,
-      },
     ];
   },
 };
